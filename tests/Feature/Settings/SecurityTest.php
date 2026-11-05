@@ -50,8 +50,8 @@ test('password can be updated', function () {
         ->from(route('security.edit'))
         ->put(route('user-password.update'), [
             'current_password' => 'password',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
         ]);
 
     $response
