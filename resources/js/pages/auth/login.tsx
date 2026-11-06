@@ -21,7 +21,7 @@ type Props = {
 export default function Login({ status, canResetPassword }: Props) {
     return (
         <>
-            <Head title={t("Log in")} />
+            <Head title={t('Log in')} />
 
             <Form
                 {...store.form()}
@@ -32,7 +32,9 @@ export default function Login({ status, canResetPassword }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">{t('Email address')}</Label>
+                                <Label htmlFor="email">
+                                    {t('Email address')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -41,14 +43,16 @@ export default function Login({ status, canResetPassword }: Props) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder={t("email@example.com")}
+                                    placeholder={t('email@example.com')}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">{t('Password')}</Label>
+                                    <Label htmlFor="password">
+                                        {t('Password')}
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
@@ -65,7 +69,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder={t("Password")}
+                                    placeholder={t('Password')}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -76,7 +80,9 @@ export default function Login({ status, canResetPassword }: Props) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">{t('Remember me')}</Label>
+                                <Label htmlFor="remember">
+                                    {t('Remember me')}
+                                </Label>
                             </div>
 
                             <Button

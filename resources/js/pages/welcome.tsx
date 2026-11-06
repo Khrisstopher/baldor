@@ -23,7 +23,7 @@ export default function Welcome() {
 
     return (
         <>
-            <Head title={t("Welcome")} />
+            <Head title={t('Welcome')} />
             <div className="flex min-h-screen flex-col bg-background text-foreground">
                 <header className="mx-auto flex w-full max-w-5xl items-center justify-between p-6">
                     <div className="flex items-center gap-3">
@@ -36,7 +36,7 @@ export default function Welcome() {
                                 href={dashboard()}
                                 className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
                             >
-                                {t("Dashboard")}
+                                {t('Dashboard')}
                             </Link>
                         ) : (
                             <>
@@ -44,13 +44,13 @@ export default function Welcome() {
                                     href={login()}
                                     className="rounded-md px-4 py-2 font-medium text-primary hover:bg-accent"
                                 >
-                                    {t("Log in")}
+                                    {t('Log in')}
                                 </Link>
                                 <Link
                                     href={register()}
                                     className="rounded-md bg-cta px-4 py-2 font-medium text-cta-foreground hover:bg-cta/90"
                                 >
-                                    {t("Register")}
+                                    {t('Register')}
                                 </Link>
                             </>
                         )}
@@ -62,7 +62,9 @@ export default function Welcome() {
                     </h1>
 
                     <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-                        {t('Practice step by step with the book exercises, organized by topic and in order of difficulty.')}
+                        {t(
+                            'Practice step by step with the book exercises, organized by topic and in order of difficulty.',
+                        )}
                     </p>
 
                     {!auth.user && (
@@ -84,7 +86,10 @@ export default function Welcome() {
 
                     <div className="mt-16 grid w-full gap-6 sm:grid-cols-3">
                         {features.map((feature) => (
-                            <div key={feature.title} className="rounded-lg border border-border p-6 text-left">
+                            <div
+                                key={feature.title}
+                                className="rounded-lg border border-border p-6 text-left"
+                            >
                                 <h2 className="font-semibold text-primary">
                                     {t(feature.title)}
                                 </h2>

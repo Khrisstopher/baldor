@@ -11,14 +11,10 @@ import { Label } from '@/components/ui/label';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
-export default function ForgotPassword({ 
-    status
-}: { 
-    status?: string
-}) {
+export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <>
-            <Head title={t("Forgot password")} />
+            <Head title={t('Forgot password')} />
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
@@ -31,14 +27,16 @@ export default function ForgotPassword({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">{t('Email address')}</Label>
+                                <Label htmlFor="email">
+                                    {t('Email address')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     name="email"
                                     autoComplete="off"
                                     autoFocus
-                                    placeholder={t("email@example.com")}
+                                    placeholder={t('email@example.com')}
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -60,7 +58,9 @@ export default function ForgotPassword({
                 </Form>
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
-                    <span>{t('Or')}, {t('return to')}</span>
+                    <span>
+                        {t('Or')}, {t('return to')}
+                    </span>
                     <TextLink href={login()}>{t('log in')}</TextLink>
                 </div>
             </div>

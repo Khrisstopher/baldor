@@ -18,7 +18,7 @@ type Props = {
 export default function ResetPassword({ token, email, passwordRules }: Props) {
     return (
         <>
-            <Head title={t("Reset password")} />
+            <Head title={t('Reset password')} />
 
             <Form
                 {...update.form()}
@@ -52,7 +52,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
                                 autoFocus
-                                placeholder={t("Password")}
+                                placeholder={t('Password')}
                                 passwordrules={passwordRules}
                             />
                             <InputError message={errors.password} />
@@ -67,7 +67,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="mt-1 block w-full"
-                                placeholder={t("Confirm password")}
+                                placeholder={t('Confirm password')}
                                 passwordrules={passwordRules}
                             />
                             <InputError

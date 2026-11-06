@@ -13,7 +13,10 @@ export default function AuthSimpleLayout({
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
-                        <Link href={home()} className="flex flex-col items-center gap-2 font-medium">
+                        <Link
+                            href={home()}
+                            className="flex flex-col items-center gap-2 font-medium"
+                        >
                             <div className="mb-1 flex items-center justify-center">
                                 <AppLogoIcon className="h-20 w-auto" />
                             </div>
