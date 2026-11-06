@@ -24,7 +24,7 @@ export default function Welcome() {
     return (
         <>
             <Head title={t("Welcome")} />
-            <div className="flex min-h-screen flex-col bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+            <div className="flex min-h-screen flex-col bg-background text-foreground">
                 <header className="mx-auto flex w-full max-w-5xl items-center justify-between p-6">
                     <div className="flex items-center gap-3">
                         <AppLogoIcon className="h-10 w-auto" />
@@ -34,7 +34,7 @@ export default function Welcome() {
                         {auth.user ? (
                             <Link
                                 href={dashboard()}
-                                className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                                className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
                             >
                                 {t("Dashboard")}
                             </Link>
@@ -42,13 +42,13 @@ export default function Welcome() {
                             <>
                                 <Link
                                     href={login()}
-                                    className="rounded-md px-4 py-2 font-medium text-blue-700 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-slate-800"
+                                    className="rounded-md px-4 py-2 font-medium text-primary hover:bg-accent"
                                 >
                                     {t("Log in")}
                                 </Link>
                                 <Link
                                     href={register()}
-                                    className="rounded-md bg-orange-600 px-4 py-2 font-medium text-white hover:bg-orange-700"
+                                    className="rounded-md bg-cta px-4 py-2 font-medium text-cta-foreground hover:bg-cta/90"
                                 >
                                     {t("Register")}
                                 </Link>
@@ -61,7 +61,7 @@ export default function Welcome() {
                         {t('Learn algebra by solving every Baldor exercise')}
                     </h1>
 
-                    <p className="mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
+                    <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
                         {t('Practice step by step with the book exercises, organized by topic and in order of difficulty.')}
                     </p>
 
@@ -69,13 +69,13 @@ export default function Welcome() {
                         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                             <Link
                                 href={register()}
-                                className="rounded-md bg-orange-600 px-8 py-3 text-base font-semibold text-white hover:bg-orange-700"
+                                className="rounded-md bg-cta px-8 py-3 text-base font-semibold text-cta-foreground hover:bg-cta/90"
                             >
                                 {t('Get started')}
                             </Link>
                             <Link
                                 href={login()}
-                                className="rounded-md border border-blue-600 px-8 py-3 text-base font-semibold text-blue-700 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-slate-800"
+                                className="rounded-md border border-primary px-8 py-3 text-base font-semibold text-primary hover:bg-accent"
                             >
                                 {t('I already have an account')}
                             </Link>
@@ -84,18 +84,18 @@ export default function Welcome() {
 
                     <div className="mt-16 grid w-full gap-6 sm:grid-cols-3">
                         {features.map((feature) => (
-                            <div key={feature.title} className="rounded-lg border border-slate-200 p-6 text-left dark:border-slate-800">
-                                <h2 className="font-semibold text-blue-700 dark:text-blue-300">
+                            <div key={feature.title} className="rounded-lg border border-border p-6 text-left">
+                                <h2 className="font-semibold text-primary">
                                     {t(feature.title)}
                                 </h2>
-                                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                                <p className="mt-2 text-sm text-muted-foreground">
                                     {t(feature.text)}
                                 </p>
                             </div>
                         ))}
                     </div>
                 </main>
-                <footer className="p-6 text-center text-sm text-slate-500">
+                <footer className="p-6 text-center text-sm text-muted-foreground">
                     © {new Date().getFullYear()} {name}
                 </footer>
             </div>
