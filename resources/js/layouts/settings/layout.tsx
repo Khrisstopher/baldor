@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { t } from '@/lib/i18n';
 import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
@@ -12,17 +13,17 @@ import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
+        title: t('Profile'),
         href: edit(),
         icon: null,
     },
     {
-        title: 'Security',
+        title: t('Security'),
         href: editSecurity(),
         icon: null,
     },
     {
-        title: 'Appearance',
+        title: t('Appearance'),
         href: editAppearance(),
         icon: null,
     },
@@ -34,8 +35,8 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     return (
         <div className="px-4 py-6">
             <Heading
-                title="Settings"
-                description="Manage your profile and account settings"
+                title={t('Settings')}
+                description={t('Manage your profile and account settings')}
             />
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">

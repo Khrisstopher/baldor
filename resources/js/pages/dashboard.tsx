@@ -1,26 +1,163 @@
-import { Head } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Head, usePage } from '@inertiajs/react';
 import { dashboard } from '@/routes';
+import { t } from '@/lib/i18n';
+
+
+// Datos de ejemplo. Pon null para ver el estado de usuario nuevo.
+const lastActivity: { topic: string; exercise: number; total: number } | null =
+    { topic: 'Suma algebraica', exercise: 12, total: 40 };
+
+// Bloque 2: Progreso general
+const progress = { solved: 150, total: 300, topicsDone: 0, topicsTotal: 12 };
+
+// Bloque 3: Temas del Baldor
+const topics = [
+    { title: 'Suma algebraica', done: 12, total: 40 },
+    { title: 'Resta algebraica', done: 0, total: 35 },
+    { title: 'Multiplicación', done: 0, total: 50 },
+    { title: 'División', done: 0, total: 45 },
+    { title: 'Productos notables', done: 0, total: 60 },
+    { title: 'Factorización', done: 40, total: 40 },
+];
+
+function topicStatus(done: number, total: number) {
+    if (done === 0) {
+        return { label: 'Not started', style: 'bg-muted text-muted-foreground' };
+    }
+    if (done >= total) {
+        return { label: 'Completed', style: 'bg-success text-success-foreground' };
+    }
+    return { label: 'In progress', style: 'bg-primary text-primary-foreground' };
+}
 
 export default function Dashboard() {
+    const { auth } = usePage().props;
+
+    const percent = progress.total
+    ? Math.round((progress.solved / progress.total) * 100)
+    : 0;
+
     return (
         <>
-            <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+            <Head title={t('Home')} />
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                <h1 className="text-2xl font-bold">
+                    {t('Hello')}, {auth.user.name}
+                </h1>
+
+                {/* Bloque 1: continuar donde lo dejó */}
+                <section className="rounded-xl border border-border bg-card p-6 text-card-foreground">
+                    <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+                        {lastActivity
+                            ? t('Continue where you left off')
+                            : t('Start with the first topic')}
+                    </p>
+
+                    {lastActivity ? (
+                        <>
+                            <h2 className="mt-2 text-xl font-bold">
+                                {lastActivity.topic}
+                            </h2>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                {t('Exercise')} {lastActivity.exercise}{' '}
+                                {t('of')} {lastActivity.total}
+                            </p>
+                        </>
+                    ) : (
+                        <p className="mt-2 text-muted-foreground">
+                            {t('Practice step by step with the book exercises, organized by topic and in order of difficulty.')}
+                        </p>
+                    )}
+
+                    {/* TODO: cambiar por <Link href=...> cuando exista la ruta de temas */}
+                    <button
+                        type="button"
+                        className="mt-5 rounded-md bg-cta px-6 py-2.5 text-sm font-semibold text-cta-foreground hover:bg-cta/90"
+                    >
+                        {lastActivity ? t('Continue') : t('Start')}
+                    </button>
+                </section>
+
+                {/* Bloque 2: progreso general */}
+                <section className="rounded-xl border border-border bg-card p-6 text-card-foreground">
+                    <div className="flex items-baseline justify-between">
+                        <h2 className="text-lg font-bold">{t('Overall progress')}</h2>
+                        <span className="text-2xl font-extrabold text-primary">
+                            {percent}%
+                        </span>
                     </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+
+                    <div
+                        role="progressbar"
+                        aria-valuenow={percent}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        className="mt-4 h-3 w-full overflow-hidden rounded-full bg-muted"
+                    >
+                        <div
+                            className="h-full rounded-full bg-primary"
+                            style={{ width: `${percent}%` }}
+                        />
                     </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+
+                    <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                        <div>
+                            <p className="text-sm text-muted-foreground">
+                                {t('Exercises solved')}
+                            </p>
+                            <p className="text-xl font-semibold">
+                                {progress.solved} {t('of')} {progress.total}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-muted-foreground">
+                                {t('Topics completed')}
+                            </p>
+                            <p className="text-xl font-semibold">
+                                {progress.topicsDone} {t('of')} {progress.topicsTotal}
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
+                </section>
+
+                {/* Bloque 3: temas del Baldor */}
+                <section>
+                    <h2 className="mb-4 text-lg font-bold">{t('Topics')}</h2>
+
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {topics.map((topic) => {
+                            const status = topicStatus(topic.done, topic.total);
+                            const topicPercent = Math.round((topic.done / topic.total) * 100);
+
+                            return (
+                                <div
+                                    key={topic.title}
+                                    className="rounded-xl border border-border bg-card p-5 text-card-foreground"
+                                >
+                                    <div className="flex items-start justify-between gap-3">
+                                        <h3 className="font-semibold">{topic.title}</h3>
+                                        <span
+                                            className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${status.style}`}
+                                        >
+                                            {t(status.label)}
+                                        </span>
+                                    </div>
+
+                                    <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
+                                        <div
+                                            className="h-full rounded-full bg-primary"
+                                            style={{ width: `${topicPercent}%` }}
+                                        />
+                                    </div>
+
+                                    <p className="mt-2 text-sm text-muted-foreground">
+                                        {topic.done} {t('of')} {topic.total} {t('exercises')}
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
             </div>
         </>
     );
@@ -29,7 +166,7 @@ export default function Dashboard() {
 Dashboard.layout = {
     breadcrumbs: [
         {
-            title: 'Dashboard',
+            title: t('Home'),
             href: dashboard(),
         },
     ],

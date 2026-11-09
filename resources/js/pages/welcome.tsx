@@ -36,7 +36,7 @@ export default function Welcome() {
                                 href={dashboard()}
                                 className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
                             >
-                                {t('Dashboard')}
+                                {t('Enter')}
                             </Link>
                         ) : (
                             <>
