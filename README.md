@@ -1,6 +1,6 @@
 # 📐 Baldor
 
-> Aplicación web para aprender álgebra al estilo del *Álgebra de Baldor*: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
+> Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
 
 ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-yellow?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
@@ -14,11 +14,15 @@
 
 ## 🚧 Estado del proyecto
 
-Baldor está en construcción. Hoy ya funciona toda la parte de cuentas de usuario y la interfaz principal, pero **el contenido de álgebra (temas y ejercicios) todavía no existe**: el inicio usa datos de ejemplo mientras se diseña la base de datos.
+
+Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, y un dashboard conectado a la base de datos que muestra el progreso individual de cada estudiante.
+
+El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
 
 > Nota sobre el contenido: este repositorio no incluye material del libro. Los temas y ejercicios que se agreguen serán propios, inspirados en el estilo de enseñanza de Baldor.
 
 **Hecho**
+
 - [x] Portada con descripción de la app
 - [x] Registro, inicio y cierre de sesión
 - [x] Recuperación de contraseña (rutas y pantallas listas)
@@ -28,6 +32,7 @@ Baldor está en construcción. Hoy ya funciona toda la parte de cuentas de usuar
 - [x] Pruebas automatizadas y análisis estático
 
 **Pendiente**
+
 - [ ] Modelo de datos: temas, ejercicios y progreso por usuario
 - [ ] Conectar el inicio a la base de datos
 - [ ] Vista de un tema con su lista de ejercicios
@@ -54,17 +59,17 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ## Stack técnico
 
-| Capa | Tecnología |
-|---|---|
-| Backend | PHP 8.3 · Laravel 13 |
-| Autenticación | Laravel Fortify (registro, login, recuperación de contraseña) |
-| Frontend | React 19 · TypeScript · Inertia.js 3 |
-| Estilos | Tailwind CSS 4 · componentes Radix UI · iconos Lucide |
-| Rutas tipadas | Laravel Wayfinder |
-| Base de datos | SQLite (por defecto) |
-| Herramientas | Vite · Laravel Pint · PHPStan |
-| Pruebas | Pest |
-| Integración continua | GitHub Actions |
+| Capa                 | Tecnología                                                    |
+| -------------------- | ------------------------------------------------------------- |
+| Backend              | PHP 8.3 · Laravel 13                                          |
+| Autenticación        | Laravel Fortify (registro, login, recuperación de contraseña) |
+| Frontend             | React 19 · TypeScript · Inertia.js 3                          |
+| Estilos              | Tailwind CSS 4 · componentes Radix UI · iconos Lucide         |
+| Rutas tipadas        | Laravel Wayfinder                                             |
+| Base de datos        | SQLite (por defecto)                                          |
+| Herramientas         | Vite · Laravel Pint · PHPStan                                 |
+| Pruebas              | Pest                                                          |
+| Integración continua | GitHub Actions                                                |
 
 ---
 
@@ -80,16 +85,21 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ---
 
+
 ## Pruebas automatizadas
 
-Hay 26 pruebas con **Pest** que cubren:
+Hay 30 pruebas registradas con **Pest** (27 aprobadas y 3 omitidas según la configuración actual).
+
+Cubren:
 
 - Inicio de sesión (casos correctos e incorrectos)
 - Registro de usuarios
 - Recuperación y restablecimiento de contraseña
 - Actualización de perfil
 - Cambio de contraseña en seguridad
-- Acceso protegido al inicio
+- Acceso protegido al dashboard
+- Progreso individual por usuario
+- Registro de intentos y temas completados
 
 ```bash
 composer test
@@ -143,12 +153,12 @@ Abre la dirección que indique la terminal (normalmente `http://localhost:8000`)
 
 ### Variables de entorno
 
-| Variable | Descripción |
-|---|---|
-| `APP_NAME` | Nombre de la app (`Baldor`) |
-| `APP_LOCALE` | Idioma de la interfaz (`es`) |
-| `DB_CONNECTION` | Base de datos; por defecto `sqlite` |
-| `MAIL_MAILER` | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
+| Variable        | Descripción                                                                                              |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| `APP_NAME`      | Nombre de la app (`Baldor`)                                                                              |
+| `APP_LOCALE`    | Idioma de la interfaz (`es`)                                                                             |
+| `DB_CONNECTION` | Base de datos; por defecto `sqlite`                                                                      |
+| `MAIL_MAILER`   | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
 
 ---
 
