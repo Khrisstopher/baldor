@@ -14,7 +14,6 @@
 
 ## 🚧 Estado del proyecto
 
-
 Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, y un dashboard conectado a la base de datos que muestra el progreso individual de cada estudiante.
 
 El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
@@ -28,13 +27,13 @@ El contenido de álgebra todavía está en desarrollo y los datos actuales son d
 - [x] Recuperación de contraseña (rutas y pantallas listas)
 - [x] Configuración de cuenta: perfil, seguridad y apariencia (modo claro/oscuro)
 - [x] Interfaz completamente en español
-- [x] Inicio del estudiante con tres bloques: continuar donde lo dejó, progreso general y temas (con datos de ejemplo)
+- [x] Modelo de datos: temas, ejercicios y progreso por usuario
+- [x] Conectar el inicio a la base de datos
+- [x] Inicio del estudiante con tres bloques: continuar donde lo dejó, progreso general y temas
 - [x] Pruebas automatizadas y análisis estático
 
 **Pendiente**
 
-- [ ] Modelo de datos: temas, ejercicios y progreso por usuario
-- [ ] Conectar el inicio a la base de datos
 - [ ] Vista de un tema con su lista de ejercicios
 - [ ] Resolver ejercicios y guardar el avance
 - [ ] Envío real de correos para recuperar la contraseña
@@ -85,21 +84,22 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ---
 
-
 ## Pruebas automatizadas
 
-Hay 30 pruebas registradas con **Pest** (27 aprobadas y 3 omitidas según la configuración actual).
+El proyecto cuenta con pruebas automatizadas desarrolladas con **Pest**.
 
 Cubren:
 
-- Inicio de sesión (casos correctos e incorrectos)
-- Registro de usuarios
-- Recuperación y restablecimiento de contraseña
-- Actualización de perfil
-- Cambio de contraseña en seguridad
-- Acceso protegido al dashboard
-- Progreso individual por usuario
-- Registro de intentos y temas completados
+- Inicio de sesión (casos correctos e incorrectos).
+- Registro de usuarios.
+- Recuperación y restablecimiento de contraseña.
+- Actualización del perfil.
+- Cambio de contraseña.
+- Acceso protegido al dashboard.
+- Cálculo del progreso individual por usuario.
+- Identificación de ejercicios resueltos, temas completados y última actividad.
+
+Para ejecutar las verificaciones de calidad y las pruebas:
 
 ```bash
 composer test
@@ -109,14 +109,15 @@ composer test
 
 ## Estructura del proyecto
 
-```
 baldor/
 ├── app/
 │   ├── Actions/            # Acciones de autenticación y usuarios
 │   ├── Http/Controllers/
+│   │   ├── DashboardController.php
 │   │   └── Settings/       # Perfil y seguridad
-│   ├── Models/             # User
+│   ├── Models/             # User, Topic, Exercise, Attempt
 │   └── Providers/
+├── database/               # Migraciones, factories y seeders
 ├── lang/                   # Traducciones (es.json y archivos de Laravel)
 ├── resources/
 │   ├── css/app.css         # Colores y estilos globales
@@ -124,30 +125,41 @@ baldor/
 │       ├── components/     # Componentes reutilizables
 │       ├── layouts/        # Layouts de app, autenticación y configuración
 │       ├── lib/            # Utilidades (traducción)
-│       └── pages/          # welcome, dashboard, auth/*, settings/*
+│       ├── pages/          # welcome, dashboard, auth/*, settings/*
+│       └── types/          # Tipos de TypeScript
 ├── routes/                 # web.php y settings.php
 ├── tests/                  # Pruebas con Pest
 └── .github/workflows/      # Integración continua
-```
 
 ---
 
 ## Instalación local
 
-Requisitos: **PHP 8.3+**, **Composer** y **Node.js**.
+**Requisitos:** PHP 8.3+, Composer y Node.js.
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/Khrisstopher/baldor.git
 cd baldor
 
-# 2. Instalar y preparar todo
-#    (dependencias, .env, clave de la app, migraciones y build)
+# 2. Instalar y preparar la aplicación
 composer setup
 
-# 3. Ejecutar en modo desarrollo
+# 3. Cargar los datos de demostración
+php artisan db:seed
+
+# 4. Ejecutar en modo desarrollo
 composer dev
 ```
+
+### Usuario de demostración
+
+Después de cargar los datos de demostración, puedes ingresar con:
+
+- **Correo:** `test@example.com`
+- **Contraseña:** `password`
+
+Los datos de demostración incluyen temas, ejercicios y registros de progreso para visualizar el funcionamiento del panel de inicio.
 
 Abre la dirección que indique la terminal (normalmente `http://localhost:8000`) y crea tu cuenta desde la portada.
 
