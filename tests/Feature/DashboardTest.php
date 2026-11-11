@@ -52,3 +52,49 @@ test('dashboard shows progress from the database', function () {
             ->where('progress.total', 4)
             ->where('lastActivity.topic', $topic->title));
 });
+
+// Comprueba que los intentos de otros usuarios no afectan el progreso del usuario autenticado.
+test('progress only counts the authenticated user attempts', function () {
+    $user = User::factory()->create();
+    $other = User::factory()->create();
+    $topic = Topic::factory()->has(
+        Exercise::factory()->count(2)->sequence(fn ($s) => ['position' => $s->index + 1])
+    )->create();
+
+    Attempt::factory()->correct()->for($other)->for($topic->exercises()->first())->create();
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('progress.solved', 0)
+            ->where('lastActivity', null));
+});
+
+// Comprueba que un intento incorrecto se muestra como última actividad pero no cuenta como resuelto.
+test('a wrong attempt is last activity but not solved', function () {
+    $user = User::factory()->create();
+    $topic = Topic::factory()->has(
+        Exercise::factory()->count(2)->sequence(fn ($s) => ['position' => $s->index + 1])
+    )->create();
+
+    Attempt::factory()->for($user)->for($topic->exercises()->first())->create();
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('progress.solved', 0)
+            ->where('lastActivity.exercise', 1));
+});
+
+// Comprueba que un tema con todos los ejercicios resueltos se cuenta como completado.
+test('a topic with all exercises solved counts as completed', function () {
+    $user = User::factory()->create();
+    $topic = Topic::factory()->has(
+        Exercise::factory()->count(2)->sequence(fn ($s) => ['position' => $s->index + 1])
+    )->create();
+
+    $topic->exercises->each(fn ($e) => Attempt::factory()->correct()->for($user)->for($e)->create());
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('progress.topicsDone', 1)
+            ->where('progress.solved', 2));
+});

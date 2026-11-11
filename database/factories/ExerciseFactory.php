@@ -20,7 +20,7 @@ class ExerciseFactory extends Factory
     {
         return [
             'topic_id' => Topic::factory(),
-            'statement' => 'Ejercicio de practica: '.fake()->sentence(),
+            'statement' => 'Ejercicio de práctica: '.fake()->sentence(),
             'answer' => (string) fake()->numberBetween(1, 20),
             'position' => 1,
         ];

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('statement');
             $table->string('answer');
             $table->unsignedSmallInteger('position')->default(0);
+            $table->unique(['topic_id', 'position']);
             $table->timestamps();
         });
     }

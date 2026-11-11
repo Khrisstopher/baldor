@@ -14,7 +14,10 @@
 
 ## 🚧 Estado del proyecto
 
-Baldor está en construcción. Hoy ya funciona toda la parte de cuentas de usuario y la interfaz principal, pero **el contenido de álgebra (temas y ejercicios) todavía no existe**: el inicio usa datos de ejemplo mientras se diseña la base de datos.
+
+Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, y un dashboard conectado a la base de datos que muestra el progreso individual de cada estudiante.
+
+El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
 
 > Nota sobre el contenido: este repositorio no incluye material del libro. Los temas y ejercicios que se agreguen serán propios, inspirados en el estilo de enseñanza de Baldor.
 
@@ -82,16 +85,21 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ---
 
+
 ## Pruebas automatizadas
 
-Hay 26 pruebas con **Pest** que cubren:
+Hay 30 pruebas registradas con **Pest** (27 aprobadas y 3 omitidas según la configuración actual).
+
+Cubren:
 
 - Inicio de sesión (casos correctos e incorrectos)
 - Registro de usuarios
 - Recuperación y restablecimiento de contraseña
 - Actualización de perfil
 - Cambio de contraseña en seguridad
-- Acceso protegido al inicio
+- Acceso protegido al dashboard
+- Progreso individual por usuario
+- Registro de intentos y temas completados
 
 ```bash
 composer test

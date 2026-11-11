@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Attempt;
+use App\Models\Exercise;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,15 @@ class AttemptFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'exercise_id' => Exercise::factory(),
+            'given_answer' => (string) fake()->numberBetween(1, 20),
+            'is_correct' => false,
         ];
+    }
+
+    public function correct(): static
+    {
+        return $this->state(fn () => ['is_correct' => true]);
     }
 }

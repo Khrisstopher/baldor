@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $last = Attempt::query()
             ->where('user_id', $userId)
             ->with('exercise.topic')
-            ->latest()
+            ->latest('id')
             ->first();
 
         return Inertia::render('dashboard', [
