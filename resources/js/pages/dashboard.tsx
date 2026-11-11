@@ -1,41 +1,40 @@
 import { Head, usePage } from '@inertiajs/react';
+import type { LastActivity, Progress, TopicSummary } from '@/types';
+
 import { dashboard } from '@/routes';
 import { t } from '@/lib/i18n';
 
-
-// Datos de ejemplo. Pon null para ver el estado de usuario nuevo.
-const lastActivity: { topic: string; exercise: number; total: number } | null =
-    { topic: 'Suma algebraica', exercise: 12, total: 40 };
-
-// Bloque 2: Progreso general
-const progress = { solved: 150, total: 300, topicsDone: 0, topicsTotal: 12 };
-
-// Bloque 3: Temas del Baldor
-const topics = [
-    { title: 'Suma algebraica', done: 12, total: 40 },
-    { title: 'Resta algebraica', done: 0, total: 35 },
-    { title: 'Multiplicación', done: 0, total: 50 },
-    { title: 'División', done: 0, total: 45 },
-    { title: 'Productos notables', done: 0, total: 60 },
-    { title: 'Factorización', done: 40, total: 40 },
-];
+type Props = {
+    lastActivity: LastActivity;
+    progress: Progress;
+    topics: TopicSummary[];
+};
 
 function topicStatus(done: number, total: number) {
     if (done === 0) {
-        return { label: 'Not started', style: 'bg-muted text-muted-foreground' };
+        return {
+            label: 'Not started',
+            style: 'bg-muted text-muted-foreground',
+        };
     }
     if (done >= total) {
-        return { label: 'Completed', style: 'bg-success text-success-foreground' };
+        return {
+            label: 'Completed',
+            style: 'bg-success text-success-foreground',
+        };
     }
-    return { label: 'In progress', style: 'bg-primary text-primary-foreground' };
+    return {
+        label: 'In progress',
+        style: 'bg-primary text-primary-foreground',
+    };
 }
 
-export default function Dashboard() {
+export default function Dashboard({ lastActivity, progress, topics }: Props) {
     const { auth } = usePage().props;
 
     const percent = progress.total
-    ? Math.round((progress.solved / progress.total) * 100)
-    : 0;
+        ? Math.round((progress.solved / progress.total) * 100)
+        : 0;
 
     return (
         <>
@@ -47,7 +46,7 @@ export default function Dashboard() {
 
                 {/* Bloque 1: continuar donde lo dejó */}
                 <section className="rounded-xl border border-border bg-card p-6 text-card-foreground">
-                    <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+                    <p className="text-sm font-semibold tracking-wide text-primary uppercase">
                         {lastActivity
                             ? t('Continue where you left off')
                             : t('Start with the first topic')}
@@ -65,7 +64,9 @@ export default function Dashboard() {
                         </>
                     ) : (
                         <p className="mt-2 text-muted-foreground">
-                            {t('Practice step by step with the book exercises, organized by topic and in order of difficulty.')}
+                            {t(
+                                'Practice step by step with the book exercises, organized by topic and in order of difficulty.',
+                            )}
                         </p>
                     )}
 
@@ -81,7 +82,9 @@ export default function Dashboard() {
                 {/* Bloque 2: progreso general */}
                 <section className="rounded-xl border border-border bg-card p-6 text-card-foreground">
                     <div className="flex items-baseline justify-between">
-                        <h2 className="text-lg font-bold">{t('Overall progress')}</h2>
+                        <h2 className="text-lg font-bold">
+                            {t('Overall progress')}
+                        </h2>
                         <span className="text-2xl font-extrabold text-primary">
                             {percent}%
                         </span>
@@ -114,7 +117,8 @@ export default function Dashboard() {
                                 {t('Topics completed')}
                             </p>
                             <p className="text-xl font-semibold">
-                                {progress.topicsDone} {t('of')} {progress.topicsTotal}
+                                {progress.topicsDone} {t('of')}{' '}
+                                {progress.topicsTotal}
                             </p>
                         </div>
                     </div>
@@ -127,15 +131,19 @@ export default function Dashboard() {
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {topics.map((topic) => {
                             const status = topicStatus(topic.done, topic.total);
-                            const topicPercent = Math.round((topic.done / topic.total) * 100);
+                            const topicPercent = topic.total
+                                ? Math.round((topic.done / topic.total) * 100)
+                                : 0;
 
                             return (
                                 <div
-                                    key={topic.title}
+                                    key={topic.id}
                                     className="rounded-xl border border-border bg-card p-5 text-card-foreground"
                                 >
                                     <div className="flex items-start justify-between gap-3">
-                                        <h3 className="font-semibold">{topic.title}</h3>
+                                        <h3 className="font-semibold">
+                                            {topic.title}
+                                        </h3>
                                         <span
                                             className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${status.style}`}
                                         >
@@ -146,12 +154,15 @@ export default function Dashboard() {
                                     <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
                                         <div
                                             className="h-full rounded-full bg-primary"
-                                            style={{ width: `${topicPercent}%` }}
+                                            style={{
+                                                width: `${topicPercent}%`,
+                                            }}
                                         />
                                     </div>
 
                                     <p className="mt-2 text-sm text-muted-foreground">
-                                        {topic.done} {t('of')} {topic.total} {t('exercises')}
+                                        {topic.done} {t('of')} {topic.total}{' '}
+                                        {t('exercises')}
                                     </p>
                                 </div>
                             );

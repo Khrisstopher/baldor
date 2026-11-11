@@ -18,7 +18,10 @@ class TopicFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'slug' => fake()->unique()->slug(),
+            'title' => fake()->words(2, true),
+            'description' => fake()->sentence(),
+            'position' => fake()->numberBetween(1, 10),
         ];
     }
 }

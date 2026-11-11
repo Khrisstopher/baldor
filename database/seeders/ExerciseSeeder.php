@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Exercise;
+use App\Models\Topic;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class ExerciseSeeder extends Seeder
@@ -12,6 +14,16 @@ class ExerciseSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $topics = Topic::all();
+
+        foreach ($topics as $topic) {
+            Exercise::factory()
+                ->count(5)
+                ->for($topic)
+                ->sequence(fn (Sequence $sequence) => [
+                    'position' => $sequence->index + 1,
+                ])
+                ->create();
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Exercise;
+use App\Models\Topic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,10 @@ class ExerciseFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'topic_id' => Topic::factory(),
+            'statement' => 'Ejercicio de practica: '.fake()->sentence(),
+            'answer' => (string) fake()->numberBetween(1, 20),
+            'position' => 1,
         ];
     }
 }

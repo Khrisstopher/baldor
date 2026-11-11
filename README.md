@@ -1,6 +1,6 @@
 # 📐 Baldor
 
-> Aplicación web para aprender álgebra al estilo del *Álgebra de Baldor*: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
+> Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
 
 ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-yellow?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
@@ -19,6 +19,7 @@ Baldor está en construcción. Hoy ya funciona toda la parte de cuentas de usuar
 > Nota sobre el contenido: este repositorio no incluye material del libro. Los temas y ejercicios que se agreguen serán propios, inspirados en el estilo de enseñanza de Baldor.
 
 **Hecho**
+
 - [x] Portada con descripción de la app
 - [x] Registro, inicio y cierre de sesión
 - [x] Recuperación de contraseña (rutas y pantallas listas)
@@ -28,6 +29,7 @@ Baldor está en construcción. Hoy ya funciona toda la parte de cuentas de usuar
 - [x] Pruebas automatizadas y análisis estático
 
 **Pendiente**
+
 - [ ] Modelo de datos: temas, ejercicios y progreso por usuario
 - [ ] Conectar el inicio a la base de datos
 - [ ] Vista de un tema con su lista de ejercicios
@@ -54,17 +56,17 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ## Stack técnico
 
-| Capa | Tecnología |
-|---|---|
-| Backend | PHP 8.3 · Laravel 13 |
-| Autenticación | Laravel Fortify (registro, login, recuperación de contraseña) |
-| Frontend | React 19 · TypeScript · Inertia.js 3 |
-| Estilos | Tailwind CSS 4 · componentes Radix UI · iconos Lucide |
-| Rutas tipadas | Laravel Wayfinder |
-| Base de datos | SQLite (por defecto) |
-| Herramientas | Vite · Laravel Pint · PHPStan |
-| Pruebas | Pest |
-| Integración continua | GitHub Actions |
+| Capa                 | Tecnología                                                    |
+| -------------------- | ------------------------------------------------------------- |
+| Backend              | PHP 8.3 · Laravel 13                                          |
+| Autenticación        | Laravel Fortify (registro, login, recuperación de contraseña) |
+| Frontend             | React 19 · TypeScript · Inertia.js 3                          |
+| Estilos              | Tailwind CSS 4 · componentes Radix UI · iconos Lucide         |
+| Rutas tipadas        | Laravel Wayfinder                                             |
+| Base de datos        | SQLite (por defecto)                                          |
+| Herramientas         | Vite · Laravel Pint · PHPStan                                 |
+| Pruebas              | Pest                                                          |
+| Integración continua | GitHub Actions                                                |
 
 ---
 
@@ -143,12 +145,12 @@ Abre la dirección que indique la terminal (normalmente `http://localhost:8000`)
 
 ### Variables de entorno
 
-| Variable | Descripción |
-|---|---|
-| `APP_NAME` | Nombre de la app (`Baldor`) |
-| `APP_LOCALE` | Idioma de la interfaz (`es`) |
-| `DB_CONNECTION` | Base de datos; por defecto `sqlite` |
-| `MAIL_MAILER` | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
+| Variable        | Descripción                                                                                              |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| `APP_NAME`      | Nombre de la app (`Baldor`)                                                                              |
+| `APP_LOCALE`    | Idioma de la interfaz (`es`)                                                                             |
+| `DB_CONNECTION` | Base de datos; por defecto `sqlite`                                                                      |
+| `MAIL_MAILER`   | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
 
 ---
 
