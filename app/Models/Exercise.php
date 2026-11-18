@@ -26,4 +26,11 @@ class Exercise extends Model
     {
         return $this->hasMany(Attempt::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'options' => 'array',
+        ];
+    }
 }

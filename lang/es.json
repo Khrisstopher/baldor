@@ -79,5 +79,13 @@
     "Not started": "Sin empezar",
     "In progress": "En curso",
     "Completed": "Completado",
-    "exercises": "ejercicios"
+    "exercises": "ejercicios",
+    "Exercises": "Ejercicios",
+    "Solved": "Resuelto",
+    "Pending": "Pendiente",
+    "Topic progress": "Progreso de temas",
+    "Back to": "Volver a",
+    "Correct! Well done.": "¡Correcto! Bien hecho.",
+    "Incorrect answer. Try again.": "Respuesta incorrecta. Intenta de nuevo.",
+    "Check Answer": "Revisar respuesta"
 }

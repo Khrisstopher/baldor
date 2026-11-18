@@ -18,10 +18,22 @@ class ExerciseFactory extends Factory
      */
     public function definition(): array
     {
+        $answer = (string) fake()->numberBetween(1, 20);
+
+        $options = [
+            $answer,
+            (string) fake()->numberBetween(21, 40),
+            (string) fake()->numberBetween(41, 60),
+            (string) fake()->numberBetween(61, 80),
+        ];
+
+        shuffle($options);
+
         return [
             'topic_id' => Topic::factory(),
             'statement' => 'Ejercicio de práctica: '.fake()->sentence(),
-            'answer' => (string) fake()->numberBetween(1, 20),
+            'options' => $options,
+            'answer' => $answer,
             'position' => 1,
         ];
     }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('topic_id')->constrained()->cascadeOnDelete();
             $table->text('statement');
+            $table->json('options');
             $table->string('answer');
             $table->unsignedSmallInteger('position')->default(0);
             $table->unique(['topic_id', 'position']);

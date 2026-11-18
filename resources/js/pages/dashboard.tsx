@@ -1,7 +1,8 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import type { LastActivity, Progress, TopicSummary } from '@/types';
 
 import { dashboard } from '@/routes';
+import { show } from '@/routes/topics';
 import { t } from '@/lib/i18n';
 
 type Props = {
@@ -136,9 +137,10 @@ export default function Dashboard({ lastActivity, progress, topics }: Props) {
                                 : 0;
 
                             return (
-                                <div
+                                <Link
                                     key={topic.id}
-                                    className="rounded-xl border border-border bg-card p-5 text-card-foreground"
+                                    href={show({ topic: topic.slug })}
+                                    className="block rounded-xl border border-border bg-card p-5 text-card-foreground transition hover:border-primary"
                                 >
                                     <div className="flex items-start justify-between gap-3">
                                         <h3 className="font-semibold">
@@ -164,7 +166,7 @@ export default function Dashboard({ lastActivity, progress, topics }: Props) {
                                         {topic.done} {t('of')} {topic.total}{' '}
                                         {t('exercises')}
                                     </p>
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>

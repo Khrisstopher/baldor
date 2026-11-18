@@ -111,25 +111,25 @@ composer test
 
 baldor/
 ├── app/
-│   ├── Actions/            # Acciones de autenticación y usuarios
-│   ├── Http/Controllers/
-│   │   ├── DashboardController.php
-│   │   └── Settings/       # Perfil y seguridad
-│   ├── Models/             # User, Topic, Exercise, Attempt
-│   └── Providers/
-├── database/               # Migraciones, factories y seeders
-├── lang/                   # Traducciones (es.json y archivos de Laravel)
+│ ├── Actions/ # Acciones de autenticación y usuarios
+│ ├── Http/Controllers/
+│ │ ├── DashboardController.php
+│ │ └── Settings/ # Perfil y seguridad
+│ ├── Models/ # User, Topic, Exercise, Attempt
+│ └── Providers/
+├── database/ # Migraciones, factories y seeders
+├── lang/ # Traducciones (es.json y archivos de Laravel)
 ├── resources/
-│   ├── css/app.css         # Colores y estilos globales
-│   └── js/
-│       ├── components/     # Componentes reutilizables
-│       ├── layouts/        # Layouts de app, autenticación y configuración
-│       ├── lib/            # Utilidades (traducción)
-│       ├── pages/          # welcome, dashboard, auth/*, settings/*
-│       └── types/          # Tipos de TypeScript
-├── routes/                 # web.php y settings.php
-├── tests/                  # Pruebas con Pest
-└── .github/workflows/      # Integración continua
+│ ├── css/app.css # Colores y estilos globales
+│ └── js/
+│ ├── components/ # Componentes reutilizables
+│ ├── layouts/ # Layouts de app, autenticación y configuración
+│ ├── lib/ # Utilidades (traducción)
+│ ├── pages/ # welcome, dashboard, auth/_, settings/_
+│ └── types/ # Tipos de TypeScript
+├── routes/ # web.php y settings.php
+├── tests/ # Pruebas con Pest
+└── .github/workflows/ # Integración continua
 
 ---
 

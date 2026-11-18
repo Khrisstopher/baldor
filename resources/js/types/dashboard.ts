@@ -13,6 +13,7 @@ export type Progress = {
 
 export type TopicSummary = {
     id: number;
+    slug: string;
     title: string;
     done: number;
     total: number;
