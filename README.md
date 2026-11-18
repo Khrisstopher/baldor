@@ -155,12 +155,12 @@ baldor/
 
 ### Rutas principales
 
-| Ruta                                          | Método | Qué hace                              |
-| --------------------------------------------- | ------ | ------------------------------------- |
-| `/dashboard`                                  | GET    | Inicio del estudiante                 |
-| `/temas/{tema}`                               | GET    | Tema con su lista de ejercicios       |
-| `/temas/{tema}/ejercicios/{ejercicio}`        | GET    | Ejercicio de opción múltiple          |
-| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST | Guarda el intento y devuelve el resultado |
+| Ruta                                            | Método | Qué hace                                  |
+| ----------------------------------------------- | ------ | ----------------------------------------- |
+| `/dashboard`                                    | GET    | Inicio del estudiante                     |
+| `/temas/{tema}`                                 | GET    | Tema con su lista de ejercicios           |
+| `/temas/{tema}/ejercicios/{ejercicio}`          | GET    | Ejercicio de opción múltiple              |
+| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST   | Guarda el intento y devuelve el resultado |
 
 Todas requieren iniciar sesión y verificar el correo.
 
