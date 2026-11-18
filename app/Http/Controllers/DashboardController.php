@@ -27,6 +27,7 @@ class DashboardController extends Controller
             ->get()
             ->map(fn (Topic $t) => [
                 'id' => $t->id,
+                'slug' => $t->slug,
                 'title' => $t->title,
                 'done' => (int) $t->done,
                 'total' => (int) $t->total,
