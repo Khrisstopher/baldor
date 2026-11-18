@@ -14,7 +14,7 @@
 
 ## 🚧 Estado del proyecto
 
-Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, y un dashboard conectado a la base de datos que muestra el progreso individual de cada estudiante.
+Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, un inicio conectado a la base de datos y el ciclo principal de estudio: el estudiante entra a un tema, resuelve ejercicios de opción múltiple y su avance queda guardado.
 
 El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
 
@@ -30,12 +30,17 @@ El contenido de álgebra todavía está en desarrollo y los datos actuales son d
 - [x] Modelo de datos: temas, ejercicios y progreso por usuario
 - [x] Conectar el inicio a la base de datos
 - [x] Inicio del estudiante con tres bloques: continuar donde lo dejó, progreso general y temas
+- [x] Vista de un tema con su descripción, barra de progreso y lista de ejercicios
+- [x] Vista de un ejercicio de opción múltiple
+- [x] Resolver ejercicios: validación de la respuesta, registro del intento y mensaje de resultado
 - [x] Pruebas automatizadas y análisis estático
 
 **Pendiente**
 
-- [ ] Vista de un tema con su lista de ejercicios
-- [ ] Resolver ejercicios y guardar el avance
+- [ ] Pruebas automáticas de las vistas de temas y ejercicios, y del guardado de intentos
+- [ ] Que el botón "Continuar" del inicio lleve al siguiente ejercicio
+- [ ] Botón "Siguiente ejercicio" al terminar uno
+- [ ] Contenido real de álgebra (temas y ejercicios propios)
 - [ ] Envío real de correos para recuperar la contraseña
 - [ ] Logo e imágenes definitivas
 - [ ] Página "Acerca de"
@@ -49,6 +54,13 @@ Los usuarios pueden registrarse, iniciar sesión y entrar a su **inicio**, que m
 1. **Continuar donde lo dejaste:** acceso directo al último tema o ejercicio (o una invitación a empezar por el primero si es un usuario nuevo).
 2. **Progreso general:** barra de porcentaje, ejercicios resueltos y temas completados.
 3. **Temas:** tarjetas con el estado de cada tema (sin empezar, en curso o completado) y su avance.
+
+Desde el inicio pueden abrir un tema y ver:
+
+- Su descripción y su barra de progreso.
+- La lista de ejercicios, cada uno marcado como **resuelto** o **pendiente**.
+
+Al abrir un ejercicio eligen una de las opciones y pulsan **Revisar respuesta**: la app guarda el intento y muestra si fue correcto o no. Se pueden hacer varios intentos, y un ejercicio cuenta como resuelto cuando se acierta al menos una vez.
 
 Desde la configuración pueden editar su perfil, cambiar la contraseña y elegir la apariencia de la interfaz.
 
@@ -76,6 +88,10 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 **Aplicación sin API separada.** Inertia conecta Laravel con React: las rutas y la autenticación viven en Laravel y las pantallas son componentes de React, sin construir una API REST aparte.
 
+**Ejercicios de opción múltiple.** Cada ejercicio guarda sus opciones (en una columna JSON) y su respuesta correcta. La respuesta correcta nunca se envía al navegador: solo se compara en el servidor al recibir el intento, y se valida que la opción enviada sea una de las opciones del ejercicio.
+
+**Rutas tipadas.** Laravel Wayfinder genera funciones de TypeScript a partir de las rutas de Laravel, por lo que los enlaces entre páginas (por ejemplo, del inicio a un tema) no dependen de textos escritos a mano.
+
 **Interfaz en español.** El idioma de la app es `es`. Los textos se escriben con una función `t()` y sus traducciones viven en `lang/es.json`.
 
 **Sistema de diseño propio.** Los colores (primario, acción `cta`, éxito, etc.) se definen como variables en `resources/css/app.css` con valores para modo claro y oscuro, y todos los componentes los reutilizan.
@@ -99,6 +115,8 @@ Cubren:
 - Cálculo del progreso individual por usuario.
 - Identificación de ejercicios resueltos, temas completados y última actividad.
 
+Aún no hay pruebas específicas para las vistas de temas y ejercicios ni para el guardado de intentos (ver "Pendiente").
+
 Para ejecutar las verificaciones de calidad y las pruebas:
 
 ```bash
@@ -109,27 +127,42 @@ composer test
 
 ## Estructura del proyecto
 
+```text
 baldor/
 ├── app/
-│ ├── Actions/ # Acciones de autenticación y usuarios
-│ ├── Http/Controllers/
-│ │ ├── DashboardController.php
-│ │ └── Settings/ # Perfil y seguridad
-│ ├── Models/ # User, Topic, Exercise, Attempt
-│ └── Providers/
-├── database/ # Migraciones, factories y seeders
-├── lang/ # Traducciones (es.json y archivos de Laravel)
+│   ├── Actions/            # Acciones de autenticación y usuarios
+│   ├── Http/Controllers/
+│   │   ├── DashboardController.php
+│   │   ├── TopicController.php      # Vista de un tema
+│   │   ├── ExerciseController.php   # Vista de un ejercicio y guardado de intentos
+│   │   └── Settings/       # Perfil y seguridad
+│   ├── Models/             # User, Topic, Exercise, Attempt
+│   └── Providers/
+├── database/               # Migraciones, factories y seeders
+├── lang/                   # Traducciones (es.json y archivos de Laravel)
 ├── resources/
-│ ├── css/app.css # Colores y estilos globales
-│ └── js/
-│ ├── components/ # Componentes reutilizables
-│ ├── layouts/ # Layouts de app, autenticación y configuración
-│ ├── lib/ # Utilidades (traducción)
-│ ├── pages/ # welcome, dashboard, auth/_, settings/_
-│ └── types/ # Tipos de TypeScript
-├── routes/ # web.php y settings.php
-├── tests/ # Pruebas con Pest
-└── .github/workflows/ # Integración continua
+│   ├── css/app.css         # Colores y estilos globales
+│   └── js/
+│       ├── components/     # Componentes reutilizables
+│       ├── layouts/        # Layouts de app, autenticación y configuración
+│       ├── lib/            # Utilidades (traducción)
+│       ├── pages/          # welcome, dashboard, topics/, exercises/, auth/, settings/
+│       └── types/          # Tipos de TypeScript
+├── routes/                 # web.php y settings.php
+├── tests/                  # Pruebas con Pest
+└── .github/workflows/      # Integración continua
+```
+
+### Rutas principales
+
+| Ruta                                          | Método | Qué hace                              |
+| --------------------------------------------- | ------ | ------------------------------------- |
+| `/dashboard`                                  | GET    | Inicio del estudiante                 |
+| `/temas/{tema}`                               | GET    | Tema con su lista de ejercicios       |
+| `/temas/{tema}/ejercicios/{ejercicio}`        | GET    | Ejercicio de opción múltiple          |
+| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST | Guarda el intento y devuelve el resultado |
+
+Todas requieren iniciar sesión y verificar el correo.
 
 ---
 
@@ -159,7 +192,7 @@ Después de cargar los datos de demostración, puedes ingresar con:
 - **Correo:** `test@example.com`
 - **Contraseña:** `password`
 
-Los datos de demostración incluyen temas, ejercicios y registros de progreso para visualizar el funcionamiento del panel de inicio.
+Los datos de demostración incluyen temas, ejercicios con opciones de respuesta y registros de progreso para visualizar el funcionamiento del inicio, los temas y los ejercicios. Los enunciados y las opciones son de relleno hasta que se escriba el contenido real.
 
 Abre la dirección que indique la terminal (normalmente `http://localhost:8000`) y crea tu cuenta desde la portada.
 

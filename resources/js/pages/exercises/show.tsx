@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
 import { show as showTopic } from '@/routes/topics';
+import { store } from '@/routes/exercises/attempts';
 import { useState } from 'react';
 
 type Topic = {
@@ -28,7 +29,10 @@ export default function Show({ topic, exercise }: Props) {
         if (selectedOption === null) return;
 
         router.post(
-            `/temas/${encodeURIComponent(topic.slug)}/ejercicios/${exercise.id}/intentos`,
+            store({
+                topic: topic.slug,
+                exercise: exercise.id,
+            }).url,
             {
                 answer: selectedOption,
             },
