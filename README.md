@@ -8,6 +8,7 @@ Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-19-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![Tests](https://img.shields.io/badge/Tests-Pest-F28D1A?style=flat-square)
 
 ---
@@ -17,6 +18,8 @@ Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas
 Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, un inicio conectado a la base de datos y el ciclo principal de estudio: el estudiante entra a un tema, resuelve ejercicios de opción múltiple y su avance queda guardado.
 
 También cuenta con pruebas automatizadas para los controladores de temas y ejercicios, la validación de respuestas, el registro de intentos y el seguimiento del progreso.
+
+El proyecto utiliza PostgreSQL como sistema de gestión de base de datos.
 
 El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
 
@@ -40,6 +43,7 @@ El contenido de álgebra todavía está en desarrollo y los datos actuales son d
 - [x] Evitar envíos duplicados mientras se procesa una respuesta.
 - [x] Pruebas automatizadas para temas, ejercicios y guardado de intentos.
 - [x] Análisis estático y comprobaciones de calidad integrados en un solo comando.
+- [x] Configuración de PostgreSQL como base de datos del proyecto.
 
 **Pendiente**
 
@@ -84,7 +88,7 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 | Frontend             | React 19 · TypeScript · Inertia.js 3                          |
 | Estilos              | Tailwind CSS 4 · componentes Radix UI · iconos Lucide         |
 | Rutas tipadas        | Laravel Wayfinder                                             |
-| Base de datos        | SQLite (por defecto)                                          |
+| Base de datos        | PostgreSQL                                                    |
 | Herramientas         | Vite · Laravel Pint · PHPStan                                 |
 | Pruebas              | Pest                                                          |
 | Integración continua | GitHub Actions                                                |
@@ -104,6 +108,8 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 **Sistema de diseño propio.** Los colores (primario, acción `cta`, éxito, etc.) se definen como variables en `resources/css/app.css` con valores para modo claro y oscuro, y todos los componentes los reutilizan.
 
 **Calidad automatizada.** El flujo de trabajo usa una rama por funcionalidad (`feature/...`). El comando `composer test` ejecuta las comprobaciones de formato de PHP (Pint), el análisis estático (PHPStan), las comprobaciones del frontend y las pruebas automatizadas (Pest).
+
+**Base de datos PostgreSQL.** La aplicación utiliza PostgreSQL como motor de base de datos. Laravel se conecta mediante el controlador `pgsql`, utilizando un usuario propio para la aplicación en lugar del superusuario de PostgreSQL.
 
 ---
 
@@ -187,20 +193,61 @@ Todas requieren iniciar sesión y verificar el correo.
 
 ## Instalación local
 
-**Requisitos:** PHP 8.3+, Composer y Node.js.
+**Requisitos:**
+
+- PHP 8.3 o superior.
+- Composer.
+- Node.js y npm.
+- PostgreSQL.
+- Extensiones PHP: `pdo_pgsql`, `pgsql` e `intl`.
+
+### Preparar PostgreSQL
+
+Antes de ejecutar las migraciones, crea un usuario y una base de datos para Baldor.
+
+Puedes hacerlo desde `psql` o desde pgAdmin. En `psql`, conectado como administrador de PostgreSQL, ejecuta:
+
+```sql
+CREATE USER baldor WITH PASSWORD 'TU_CONTRASEÑA_SEGURA';
+CREATE DATABASE baldor OWNER baldor;
+```
+
+Sustituye `TU_CONTRASEÑA_SEGURA` por una contraseña propia. No utilices la contraseña del ejemplo.
+
+### Configurar la aplicación
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/Khrisstopher/baldor.git
 cd baldor
 
-# 2. Instalar y preparar la aplicación
+# 2. Preparar el archivo de entorno
+copy .env.example .env
+```
+
+Configura las variables de conexión a PostgreSQL en el archivo `.env`:
+
+```ini
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=baldor
+DB_USERNAME=baldor
+DB_PASSWORD=TU_CONTRASEÑA
+```
+
+Sustituye `TU_CONTRASEÑA` por la contraseña que estableciste al crear el usuario de PostgreSQL. No compartas ni subas el archivo `.env` al repositorio.
+
+Continúa con la instalación:
+
+```bash
+# 3. Instalar y preparar la aplicación
 composer setup
 
-# 3. Cargar los datos de demostración
-php artisan db:seed
+# 4. Ejecutar las migraciones y cargar los datos de demostración
+php artisan migrate --seed
 
-# 4. Ejecutar en modo desarrollo
+# 5. Ejecutar en modo desarrollo
 composer dev
 ```
 
@@ -221,7 +268,12 @@ Abre la dirección que indique la terminal (normalmente `http://localhost:8000`)
 | --------------- | -------------------------------------------------------------------------------------------------------- |
 | `APP_NAME`      | Nombre de la app (`Baldor`)                                                                              |
 | `APP_LOCALE`    | Idioma de la interfaz (`es`)                                                                             |
-| `DB_CONNECTION` | Base de datos; por defecto `sqlite`                                                                      |
+| `DB_CONNECTION` | Motor de base de datos (`pgsql`)                                                                         |
+| `DB_HOST`       | Dirección del servidor PostgreSQL (normalmente `127.0.0.1`)                                              |
+| `DB_PORT`       | Puerto de PostgreSQL (normalmente `5432`)                                                                |
+| `DB_DATABASE`   | Nombre de la base de datos (`baldor`)                                                                    |
+| `DB_USERNAME`   | Usuario de PostgreSQL para la aplicación (`baldor`)                                                      |
+| `DB_PASSWORD`   | Contraseña del usuario de PostgreSQL                                                                     |
 | `MAIL_MAILER`   | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
 
 ---
