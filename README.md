@@ -1,6 +1,6 @@
 # 📐 Baldor
 
-Aplicación web para aprender álgebra al estilo del *Álgebra de Baldor*: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
+Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
 
 ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-yellow?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
@@ -81,17 +81,17 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ## Stack técnico
 
-| Capa | Tecnología |
+| Capa                 | Tecnología                                                    |
 | -------------------- | ------------------------------------------------------------- |
-| Backend | PHP 8.3 · Laravel 13 |
-| Autenticación | Laravel Fortify (registro, login, recuperación de contraseña) |
-| Frontend | React 19 · TypeScript · Inertia.js 3 |
-| Estilos | Tailwind CSS 4 · componentes Radix UI · iconos Lucide |
-| Rutas tipadas | Laravel Wayfinder |
-| Base de datos | PostgreSQL |
-| Herramientas | Vite · Laravel Pint · PHPStan |
-| Pruebas | Pest |
-| Integración continua | GitHub Actions |
+| Backend              | PHP 8.3 · Laravel 13                                          |
+| Autenticación        | Laravel Fortify (registro, login, recuperación de contraseña) |
+| Frontend             | React 19 · TypeScript · Inertia.js 3                          |
+| Estilos              | Tailwind CSS 4 · componentes Radix UI · iconos Lucide         |
+| Rutas tipadas        | Laravel Wayfinder                                             |
+| Base de datos        | PostgreSQL                                                    |
+| Herramientas         | Vite · Laravel Pint · PHPStan                                 |
+| Pruebas              | Pest                                                          |
+| Integración continua | GitHub Actions                                                |
 
 ---
 
@@ -180,12 +180,12 @@ baldor/
 
 ### Rutas principales
 
-| Ruta | Método | Qué hace |
+| Ruta                                            | Método | Qué hace                                  |
 | ----------------------------------------------- | ------ | ----------------------------------------- |
-| `/dashboard` | GET | Inicio del estudiante |
-| `/temas/{tema}` | GET | Tema con su lista de ejercicios |
-| `/temas/{tema}/ejercicios/{ejercicio}` | GET | Ejercicio de opción múltiple |
-| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST | Guarda el intento y devuelve el resultado |
+| `/dashboard`                                    | GET    | Inicio del estudiante                     |
+| `/temas/{tema}`                                 | GET    | Tema con su lista de ejercicios           |
+| `/temas/{tema}/ejercicios/{ejercicio}`          | GET    | Ejercicio de opción múltiple              |
+| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST   | Guarda el intento y devuelve el resultado |
 
 Todas requieren iniciar sesión y verificar el correo.
 
@@ -264,17 +264,17 @@ Abre la dirección que indique la terminal (normalmente `http://localhost:8000`)
 
 ### Variables de entorno
 
-| Variable | Descripción |
+| Variable        | Descripción                                                                                              |
 | --------------- | -------------------------------------------------------------------------------------------------------- |
-| `APP_NAME` | Nombre de la app (`Baldor`) |
-| `APP_LOCALE` | Idioma de la interfaz (`es`) |
-| `DB_CONNECTION` | Motor de base de datos (`pgsql`) |
-| `DB_HOST` | Dirección del servidor PostgreSQL (normalmente `127.0.0.1`) |
-| `DB_PORT` | Puerto de PostgreSQL (normalmente `5432`) |
-| `DB_DATABASE` | Nombre de la base de datos (`baldor`) |
-| `DB_USERNAME` | Usuario de PostgreSQL para la aplicación (`baldor`) |
-| `DB_PASSWORD` | Contraseña del usuario de PostgreSQL |
-| `MAIL_MAILER` | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
+| `APP_NAME`      | Nombre de la app (`Baldor`)                                                                              |
+| `APP_LOCALE`    | Idioma de la interfaz (`es`)                                                                             |
+| `DB_CONNECTION` | Motor de base de datos (`pgsql`)                                                                         |
+| `DB_HOST`       | Dirección del servidor PostgreSQL (normalmente `127.0.0.1`)                                              |
+| `DB_PORT`       | Puerto de PostgreSQL (normalmente `5432`)                                                                |
+| `DB_DATABASE`   | Nombre de la base de datos (`baldor`)                                                                    |
+| `DB_USERNAME`   | Usuario de PostgreSQL para la aplicación (`baldor`)                                                      |
+| `DB_PASSWORD`   | Contraseña del usuario de PostgreSQL                                                                     |
+| `MAIL_MAILER`   | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
 
 ---
 
