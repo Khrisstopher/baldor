@@ -24,9 +24,11 @@ type Props = {
 export default function Show({ topic, exercise }: Props) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [result, setResult] = useState<string | null>(null);
-
+    const [processing, setProcessing] = useState(false);
     function checkAnswer() {
-        if (selectedOption === null) return;
+        if (selectedOption === null || processing) return;
+
+        setProcessing(true);
 
         router.post(
             store({
@@ -45,6 +47,9 @@ export default function Show({ topic, exercise }: Props) {
                     ).flash;
 
                     setResult(flash?.result ?? null);
+                },
+                onFinish: () => {
+                    setProcessing(false);
                 },
             },
         );
@@ -79,7 +84,10 @@ export default function Show({ topic, exercise }: Props) {
                             <button
                                 key={index}
                                 type="button"
-                                onClick={() => setSelectedOption(option)}
+                                onClick={() => {
+                                    setSelectedOption(option);
+                                    setResult(null);
+                                }}
                                 className={`rounded-lg border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${
                                     selectedOption === option
                                         ? 'border-primary bg-primary/10'
@@ -97,10 +105,10 @@ export default function Show({ topic, exercise }: Props) {
                     <button
                         type="button"
                         onClick={checkAnswer}
-                        disabled={selectedOption === null}
+                        disabled={selectedOption === null || processing}
                         className="mt-5 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition-opacity focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {t('Check Answer')}
+                        {processing ? t('Checking...') : t('Check Answer')}
                     </button>
                     {result && (
                         <p

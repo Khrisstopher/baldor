@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['topic_id', 'statement', 'answer', 'position'])]
+#[Fillable(['topic_id', 'statement', 'options', 'answer', 'position'])]
 class Exercise extends Model
 {
     /** @use HasFactory<ExerciseFactory> */

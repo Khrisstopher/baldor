@@ -1,6 +1,8 @@
 export type LastActivity = {
     topic: string;
+    slug: string;
     exercise: number;
+    exerciseId: number;
     total: number;
 } | null;
 

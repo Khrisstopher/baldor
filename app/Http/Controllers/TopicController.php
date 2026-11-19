@@ -39,7 +39,6 @@ class TopicController extends Controller
                     'id' => $exercise->id,
                     'position' => $exercise->position,
                     'statement' => $exercise->statement,
-                    'options' => $exercise->options,
                     'solved' => (bool) $exercise->getAttribute('solved'),
                 ]),
             ],

@@ -42,7 +42,9 @@ class DashboardController extends Controller
         return Inertia::render('dashboard', [
             'lastActivity' => $last ? [
                 'topic' => $last->exercise->topic->title,
+                'slug' => $last->exercise->topic->slug,
                 'exercise' => $last->exercise->position,
+                'exerciseId' => $last->exercise->id,
                 'total' => $topics->firstWhere('id', $last->exercise->topic_id)['total'] ?? 0,
             ] : null,
             'progress' => [

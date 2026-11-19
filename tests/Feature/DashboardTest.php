@@ -50,7 +50,10 @@ test('dashboard shows progress from the database', function () {
             ->component('dashboard')
             ->where('progress.solved', 1)
             ->where('progress.total', 4)
-            ->where('lastActivity.topic', $topic->title));
+            ->where('lastActivity.topic', $topic->title)
+            ->where('lastActivity.slug', $topic->slug)
+            ->where('lastActivity.exerciseId', $topic->exercises()->first()->id)
+            ->where('lastActivity.exercise', 1));
 });
 
 // Comprueba que los intentos de otros usuarios no afectan el progreso del usuario autenticado.
@@ -81,7 +84,9 @@ test('a wrong attempt is last activity but not solved', function () {
     $this->actingAs($user)->get(route('dashboard'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('progress.solved', 0)
-            ->where('lastActivity.exercise', 1));
+            ->where('lastActivity.exercise', 1)
+            ->where('lastActivity.slug', $topic->slug)
+            ->where('lastActivity.exerciseId', $topic->exercises()->first()->id));
 });
 
 // Comprueba que un tema con todos los ejercicios resueltos se cuenta como completado.

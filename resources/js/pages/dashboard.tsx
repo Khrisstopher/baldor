@@ -3,6 +3,7 @@ import type { LastActivity, Progress, TopicSummary } from '@/types';
 
 import { dashboard } from '@/routes';
 import { show } from '@/routes/topics';
+import { show as showExercise } from '@/routes/exercises';
 import { t } from '@/lib/i18n';
 
 type Props = {
@@ -71,13 +72,21 @@ export default function Dashboard({ lastActivity, progress, topics }: Props) {
                         </p>
                     )}
 
-                    {/* TODO: cambiar por <Link href=...> cuando exista la ruta de temas */}
-                    <button
-                        type="button"
-                        className="mt-5 rounded-md bg-cta px-6 py-2.5 text-sm font-semibold text-cta-foreground hover:bg-cta/90"
-                    >
-                        {lastActivity ? t('Continue') : t('Start')}
-                    </button>
+                    {lastActivity || topics.length > 0 ? (
+                        <Link
+                            href={
+                                lastActivity
+                                    ? showExercise({
+                                          topic: lastActivity.slug,
+                                          exercise: lastActivity.exerciseId,
+                                      })
+                                    : show({ topic: topics[0].slug })
+                            }
+                            className="mt-5 inline-block rounded-md bg-cta px-6 py-2.5 text-sm font-semibold text-cta-foreground hover:bg-cta/90"
+                        >
+                            {lastActivity ? t('Continue') : t('Start')}
+                        </Link>
+                    ) : null}
                 </section>
 
                 {/* Bloque 2: progreso general */}
