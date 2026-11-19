@@ -1,6 +1,6 @@
 # 📐 Baldor
 
-> Aplicación web para aprender álgebra al estilo del _Álgebra de Baldor_: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
+Aplicación web para aprender álgebra al estilo del *Álgebra de Baldor*: temas, ejercicios y seguimiento del progreso del estudiante. Construida con **Laravel + React (Inertia)**. Proyecto personal **en desarrollo**.
 
 ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-yellow?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white)
@@ -16,34 +16,39 @@
 
 Baldor está en construcción. Ya cuenta con autenticación, configuración de usuario, modelo de datos para temas, ejercicios e intentos, un inicio conectado a la base de datos y el ciclo principal de estudio: el estudiante entra a un tema, resuelve ejercicios de opción múltiple y su avance queda guardado.
 
+También cuenta con pruebas automatizadas para los controladores de temas y ejercicios, la validación de respuestas, el registro de intentos y el seguimiento del progreso.
+
 El contenido de álgebra todavía está en desarrollo y los datos actuales son de demostración.
 
 > Nota sobre el contenido: este repositorio no incluye material del libro. Los temas y ejercicios que se agreguen serán propios, inspirados en el estilo de enseñanza de Baldor.
 
 **Hecho**
 
-- [x] Portada con descripción de la app
-- [x] Registro, inicio y cierre de sesión
-- [x] Recuperación de contraseña (rutas y pantallas listas)
-- [x] Configuración de cuenta: perfil, seguridad y apariencia (modo claro/oscuro)
-- [x] Interfaz completamente en español
-- [x] Modelo de datos: temas, ejercicios y progreso por usuario
-- [x] Conectar el inicio a la base de datos
-- [x] Inicio del estudiante con tres bloques: continuar donde lo dejó, progreso general y temas
-- [x] Vista de un tema con su descripción, barra de progreso y lista de ejercicios
-- [x] Vista de un ejercicio de opción múltiple
-- [x] Resolver ejercicios: validación de la respuesta, registro del intento y mensaje de resultado
-- [x] Pruebas automatizadas y análisis estático
+- [x] Portada con descripción de la app.
+- [x] Registro, inicio y cierre de sesión.
+- [x] Recuperación de contraseña (rutas y pantallas listas).
+- [x] Configuración de cuenta: perfil, seguridad y apariencia (modo claro/oscuro).
+- [x] Interfaz completamente en español.
+- [x] Modelo de datos: temas, ejercicios y progreso por usuario.
+- [x] Conectar el inicio a la base de datos.
+- [x] Inicio del estudiante con tres bloques: continuar donde lo dejó, progreso general y temas.
+- [x] Navegación desde el inicio hacia la última actividad del estudiante.
+- [x] Vista de un tema con su descripción, barra de progreso y lista de ejercicios.
+- [x] Vista de un ejercicio de opción múltiple.
+- [x] Resolver ejercicios: validación de la respuesta, registro del intento y mensaje de resultado.
+- [x] Limpiar el mensaje de resultado al seleccionar otra opción.
+- [x] Evitar envíos duplicados mientras se procesa una respuesta.
+- [x] Pruebas automatizadas para temas, ejercicios y guardado de intentos.
+- [x] Análisis estático y comprobaciones de calidad integrados en un solo comando.
 
 **Pendiente**
 
-- [ ] Pruebas automáticas de las vistas de temas y ejercicios, y del guardado de intentos
-- [ ] Que el botón "Continuar" del inicio lleve al siguiente ejercicio
-- [ ] Botón "Siguiente ejercicio" al terminar uno
-- [ ] Contenido real de álgebra (temas y ejercicios propios)
-- [ ] Envío real de correos para recuperar la contraseña
-- [ ] Logo e imágenes definitivas
-- [ ] Página "Acerca de"
+- [ ] Que el botón "Continuar" del inicio lleve al siguiente ejercicio pendiente.
+- [ ] Botón "Siguiente ejercicio" al terminar uno.
+- [ ] Contenido real de álgebra (temas y ejercicios propios).
+- [ ] Envío real de correos para recuperar la contraseña.
+- [ ] Logo e imágenes definitivas.
+- [ ] Página "Acerca de".
 
 ---
 
@@ -51,7 +56,7 @@ El contenido de álgebra todavía está en desarrollo y los datos actuales son d
 
 Los usuarios pueden registrarse, iniciar sesión y entrar a su **inicio**, que muestra:
 
-1. **Continuar donde lo dejaste:** acceso directo al último tema o ejercicio (o una invitación a empezar por el primero si es un usuario nuevo).
+1. **Continuar donde lo dejaste:** acceso directo al último ejercicio en el que hubo actividad (o una invitación a empezar por el primer tema si es un usuario nuevo).
 2. **Progreso general:** barra de porcentaje, ejercicios resueltos y temas completados.
 3. **Temas:** tarjetas con el estado de cada tema (sin empezar, en curso o completado) y su avance.
 
@@ -62,6 +67,8 @@ Desde el inicio pueden abrir un tema y ver:
 
 Al abrir un ejercicio eligen una de las opciones y pulsan **Revisar respuesta**: la app guarda el intento y muestra si fue correcto o no. Se pueden hacer varios intentos, y un ejercicio cuenta como resuelto cuando se acierta al menos una vez.
 
+Al seleccionar otra opción, el mensaje del resultado anterior se limpia para evitar mostrar información desactualizada. Mientras se envía una respuesta, el botón se deshabilita para evitar envíos duplicados.
+
 Desde la configuración pueden editar su perfil, cambiar la contraseña y elegir la apariencia de la interfaz.
 
 Es un proyecto personal de práctica: el objetivo es construir una plataforma de estudio completa con Laravel y React, paso a paso.
@@ -70,17 +77,17 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 ## Stack técnico
 
-| Capa                 | Tecnología                                                    |
+| Capa | Tecnología |
 | -------------------- | ------------------------------------------------------------- |
-| Backend              | PHP 8.3 · Laravel 13                                          |
-| Autenticación        | Laravel Fortify (registro, login, recuperación de contraseña) |
-| Frontend             | React 19 · TypeScript · Inertia.js 3                          |
-| Estilos              | Tailwind CSS 4 · componentes Radix UI · iconos Lucide         |
-| Rutas tipadas        | Laravel Wayfinder                                             |
-| Base de datos        | SQLite (por defecto)                                          |
-| Herramientas         | Vite · Laravel Pint · PHPStan                                 |
-| Pruebas              | Pest                                                          |
-| Integración continua | GitHub Actions                                                |
+| Backend | PHP 8.3 · Laravel 13 |
+| Autenticación | Laravel Fortify (registro, login, recuperación de contraseña) |
+| Frontend | React 19 · TypeScript · Inertia.js 3 |
+| Estilos | Tailwind CSS 4 · componentes Radix UI · iconos Lucide |
+| Rutas tipadas | Laravel Wayfinder |
+| Base de datos | SQLite (por defecto) |
+| Herramientas | Vite · Laravel Pint · PHPStan |
+| Pruebas | Pest |
+| Integración continua | GitHub Actions |
 
 ---
 
@@ -90,13 +97,13 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 **Ejercicios de opción múltiple.** Cada ejercicio guarda sus opciones (en una columna JSON) y su respuesta correcta. La respuesta correcta nunca se envía al navegador: solo se compara en el servidor al recibir el intento, y se valida que la opción enviada sea una de las opciones del ejercicio.
 
-**Rutas tipadas.** Laravel Wayfinder genera funciones de TypeScript a partir de las rutas de Laravel, por lo que los enlaces entre páginas (por ejemplo, del inicio a un tema) no dependen de textos escritos a mano.
+**Rutas tipadas.** Laravel Wayfinder genera funciones de TypeScript a partir de las rutas de Laravel, por lo que los enlaces entre páginas (por ejemplo, del inicio a un tema o ejercicio) no dependen de textos escritos a mano.
 
 **Interfaz en español.** El idioma de la app es `es`. Los textos se escriben con una función `t()` y sus traducciones viven en `lang/es.json`.
 
 **Sistema de diseño propio.** Los colores (primario, acción `cta`, éxito, etc.) se definen como variables en `resources/css/app.css` con valores para modo claro y oscuro, y todos los componentes los reutilizan.
 
-**Calidad automatizada.** El flujo de trabajo usa una rama por funcionalidad (`feature/...`), y el comando `composer test` ejecuta el formateo (Pint), el análisis estático (PHPStan) y las pruebas en un solo paso.
+**Calidad automatizada.** El flujo de trabajo usa una rama por funcionalidad (`feature/...`). El comando `composer test` ejecuta las comprobaciones de formato de PHP (Pint), el análisis estático (PHPStan), las comprobaciones del frontend y las pruebas automatizadas (Pest).
 
 ---
 
@@ -114,14 +121,26 @@ Cubren:
 - Acceso protegido al dashboard.
 - Cálculo del progreso individual por usuario.
 - Identificación de ejercicios resueltos, temas completados y última actividad.
-
-Aún no hay pruebas específicas para las vistas de temas y ejercicios ni para el guardado de intentos (ver "Pendiente").
+- Acceso protegido a las vistas de temas y ejercicios.
+- Visualización de ejercicios y sus opciones de respuesta.
+- Validación de respuestas enviadas.
+- Registro de intentos correctos e incorrectos.
+- Protección de la respuesta correcta para que no se envíe al navegador.
+- Verificación de que un ejercicio pertenezca al tema correspondiente.
 
 Para ejecutar las verificaciones de calidad y las pruebas:
 
 ```bash
 composer test
 ```
+
+Este comando ejecuta:
+
+1. Limpieza de la configuración de Laravel.
+2. Comprobación del formato PHP con Laravel Pint.
+3. Análisis estático con PHPStan.
+4. Comprobaciones del frontend.
+5. Pruebas automatizadas con Pest.
 
 ---
 
@@ -155,12 +174,12 @@ baldor/
 
 ### Rutas principales
 
-| Ruta                                            | Método | Qué hace                                  |
+| Ruta | Método | Qué hace |
 | ----------------------------------------------- | ------ | ----------------------------------------- |
-| `/dashboard`                                    | GET    | Inicio del estudiante                     |
-| `/temas/{tema}`                                 | GET    | Tema con su lista de ejercicios           |
-| `/temas/{tema}/ejercicios/{ejercicio}`          | GET    | Ejercicio de opción múltiple              |
-| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST   | Guarda el intento y devuelve el resultado |
+| `/dashboard` | GET | Inicio del estudiante |
+| `/temas/{tema}` | GET | Tema con su lista de ejercicios |
+| `/temas/{tema}/ejercicios/{ejercicio}` | GET | Ejercicio de opción múltiple |
+| `/temas/{tema}/ejercicios/{ejercicio}/intentos` | POST | Guarda el intento y devuelve el resultado |
 
 Todas requieren iniciar sesión y verificar el correo.
 
@@ -194,16 +213,16 @@ Después de cargar los datos de demostración, puedes ingresar con:
 
 Los datos de demostración incluyen temas, ejercicios con opciones de respuesta y registros de progreso para visualizar el funcionamiento del inicio, los temas y los ejercicios. Los enunciados y las opciones son de relleno hasta que se escriba el contenido real.
 
-Abre la dirección que indique la terminal (normalmente `http://localhost:8000`) y crea tu cuenta desde la portada.
+Abre la dirección que indique la terminal (normalmente `http://localhost:8000`) e inicia sesión con el usuario de demostración o crea tu propia cuenta desde la portada.
 
 ### Variables de entorno
 
-| Variable        | Descripción                                                                                              |
+| Variable | Descripción |
 | --------------- | -------------------------------------------------------------------------------------------------------- |
-| `APP_NAME`      | Nombre de la app (`Baldor`)                                                                              |
-| `APP_LOCALE`    | Idioma de la interfaz (`es`)                                                                             |
-| `DB_CONNECTION` | Base de datos; por defecto `sqlite`                                                                      |
-| `MAIL_MAILER`   | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
+| `APP_NAME` | Nombre de la app (`Baldor`) |
+| `APP_LOCALE` | Idioma de la interfaz (`es`) |
+| `DB_CONNECTION` | Base de datos; por defecto `sqlite` |
+| `MAIL_MAILER` | Con `log`, los correos (como el de recuperar contraseña) se guardan en `storage/logs` en vez de enviarse |
 
 ---
 
