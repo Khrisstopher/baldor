@@ -15,15 +15,15 @@ jobs:
 
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19
         env:
-          POSTGRES_DB: baldor
+          POSTGRES_DB: baldor_test
           POSTGRES_USER: baldor
           POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U baldor -d baldor"
+          --health-cmd "pg_isready -U baldor -d baldor_test"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -32,7 +32,7 @@ jobs:
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
-      DB_DATABASE: baldor
+      DB_DATABASE: baldor_test
       DB_USERNAME: baldor
       DB_PASSWORD: password
 
