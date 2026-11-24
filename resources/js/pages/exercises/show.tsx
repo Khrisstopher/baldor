@@ -2,6 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
 import { show as showTopic } from '@/routes/topics';
 import { store } from '@/routes/exercises/attempts';
+import { show as showExercise } from '@/routes/exercises';
 import { useState } from 'react';
 
 type Topic = {
@@ -19,14 +20,17 @@ type Exercise = {
 type Props = {
     topic: Topic;
     exercise: Exercise;
+    nextExercise: Exercise | null;
 };
 
-export default function Show({ topic, exercise }: Props) {
+export default function Show({ topic, exercise, nextExercise }: Props) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [result, setResult] = useState<string | null>(null);
+    const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
     const [processing, setProcessing] = useState(false);
+
     function checkAnswer() {
-        if (selectedOption === null || processing) return;
+        if (selectedOption === null || processing || result === 'correct')
+            return;
 
         setProcessing(true);
 
@@ -46,7 +50,13 @@ export default function Show({ topic, exercise }: Props) {
                         }
                     ).flash;
 
-                    setResult(flash?.result ?? null);
+                    setResult(
+                        flash?.result === 'correct'
+                            ? 'correct'
+                            : flash?.result === 'incorrect'
+                              ? 'incorrect'
+                              : null,
+                    );
                 },
                 onFinish: () => {
                     setProcessing(false);
@@ -54,6 +64,7 @@ export default function Show({ topic, exercise }: Props) {
             },
         );
     }
+
     return (
         <>
             <Head title={`${t('Exercise')} ${exercise.position}`} />
@@ -80,50 +91,90 @@ export default function Show({ topic, exercise }: Props) {
                     </h2>
 
                     <div className="mt-6 flex flex-col gap-3">
-                        {exercise.options.map((option, index) => (
-                            <button
-                                key={index}
-                                type="button"
-                                onClick={() => {
-                                    setSelectedOption(option);
-                                    setResult(null);
-                                }}
-                                className={`rounded-lg border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${
-                                    selectedOption === option
-                                        ? 'border-primary bg-primary/10'
-                                        : 'border-border hover:bg-muted'
-                                }`}
-                            >
-                                <span className="font-medium">
-                                    {String.fromCharCode(65 + index)}.
-                                </span>{' '}
-                                {option}
-                            </button>
-                        ))}
+                        {exercise.options.map((option, index) => {
+                            const isSelected = selectedOption === option;
+                            const isCorrect =
+                                isSelected && result === 'correct';
+                            const isIncorrect =
+                                isSelected && result === 'incorrect';
+
+                            return (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    aria-pressed={isSelected}
+                                    disabled={
+                                        result === 'correct' || processing
+                                    }
+                                    onClick={() => {
+                                        setSelectedOption(option);
+                                        setResult(null);
+                                    }}
+                                    className={`rounded-lg border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-default ${
+                                        isCorrect
+                                            ? 'border-success bg-success/10'
+                                            : isIncorrect
+                                              ? 'border-destructive bg-destructive/10'
+                                              : isSelected
+                                                ? 'border-primary bg-primary/10'
+                                                : 'border-border hover:bg-muted'
+                                    }`}
+                                >
+                                    <span className="font-medium">
+                                        {String.fromCharCode(65 + index)}.
+                                    </span>{' '}
+                                    {option}
+                                    {isCorrect && (
+                                        <span
+                                            role="status"
+                                            className="mt-3 block border-t border-success/30 pt-3 text-sm font-semibold text-success"
+                                        >
+                                            {t('Correct! Well done.')}
+                                        </span>
+                                    )}
+                                    {isIncorrect && (
+                                        <span
+                                            role="status"
+                                            className="mt-3 block border-t border-destructive/30 pt-3 text-sm font-semibold text-destructive"
+                                        >
+                                            {t('Incorrect answer. Try again.')}
+                                        </span>
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={checkAnswer}
-                        disabled={selectedOption === null || processing}
-                        className="mt-5 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground transition-opacity focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        {processing ? t('Checking...') : t('Check Answer')}
-                    </button>
-                    {result && (
-                        <p
-                            role="status"
-                            className={`mt-4 rounded-lg p-4 font-medium ${
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <button
+                            type="button"
+                            onClick={checkAnswer}
+                            disabled={
+                                selectedOption === null ||
+                                processing ||
                                 result === 'correct'
-                                    ? 'bg-success text-success-foreground'
-                                    : 'bg-destructive text-destructive-foreground'
-                            }`}
+                            }
+                            className="rounded-lg bg-primary px-5 py-3 text-center font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {result === 'correct'
-                                ? t('Correct! Well done.')
-                                : t('Incorrect answer. Try again.')}
-                        </p>
-                    )}
+                            {processing
+                                ? t('Checking...')
+                                : result === 'correct'
+                                  ? t('Correct!')
+                                  : t('Check Answer')}
+                        </button>
+
+                        {result === 'correct' && nextExercise && (
+                            <Link
+                                href={showExercise({
+                                    topic: topic.slug,
+                                    exercise: nextExercise.id,
+                                })}
+                                className="inline-flex justify-center rounded-lg bg-cta px-5 py-3 text-center font-medium text-cta-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-cta focus-visible:outline-none"
+                            >
+                                {t('Next exercise')} →
+                            </Link>
+                        )}
+                    </div>
                 </section>
             </div>
         </>

@@ -141,3 +141,110 @@ test('an incorrect answer saves an attempt as incorrect', function () {
         'is_correct' => false,
     ]);
 });
+
+test('an exercise receives the next exercise in inertia props', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $exercise = Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    $nextExercise = Exercise::factory()->for($topic)->create([
+        'position' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $exercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise.id', $nextExercise->id)
+            ->where('nextExercise.position', 2)
+            ->where('nextExercise.statement', $nextExercise->statement)
+            ->where('nextExercise.options', $nextExercise->options)
+        );
+});
+
+test('the last exercise receives null as next exercise', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    $lastExercise = Exercise::factory()->for($topic)->create([
+        'position' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $lastExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise', null)
+        );
+});
+
+test('the next exercise is determined by position and not by id', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $exerciseAtPosition30 = Exercise::factory()->for($topic)->create([
+        'position' => 30,
+    ]);
+
+    $currentExercise = Exercise::factory()->for($topic)->create([
+        'position' => 20,
+    ]);
+
+    Exercise::factory()->for($topic)->create([
+        'position' => 40,
+    ]);
+
+    expect($exerciseAtPosition30->id)->toBeLessThan($currentExercise->id);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $currentExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise.id', $exerciseAtPosition30->id)
+            ->where('nextExercise.position', 30)
+        );
+});
+
+test('an exercise from another topic is never returned as next exercise', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+    $anotherTopic = Topic::factory()->create();
+
+    $exercise = Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    Exercise::factory()->for($anotherTopic)->create([
+        'position' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $exercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise', null)
+        );
+});
