@@ -17,6 +17,11 @@ class ExerciseController extends Controller
     {
         abort_unless($exercise->topic_id === $topic->id, 404);
 
+        $nextExercise = $topic->exercises()
+            ->where('position', '>', $exercise->position)
+            ->orderBy('position')
+            ->first();
+
         return Inertia::render('exercises/show', [
             'topic' => [
                 'title' => $topic->title,
@@ -28,6 +33,14 @@ class ExerciseController extends Controller
                 'statement' => $exercise->statement,
                 'options' => $exercise->options,
             ],
+            'nextExercise' => $nextExercise
+                ? [
+                    'id' => $nextExercise->id,
+                    'position' => $nextExercise->position,
+                    'statement' => $nextExercise->statement,
+                    'options' => $nextExercise->options,
+                ]
+                : null,
         ]);
     }
 
