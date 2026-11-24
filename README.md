@@ -117,6 +117,10 @@ Es un proyecto personal de práctica: el objetivo es construir una plataforma de
 
 El proyecto cuenta con pruebas automatizadas desarrolladas con **Pest**.
 
+Antes de ejecutar las pruebas, asegúrate de haber creado la base de datos `baldor_test` y configurado el archivo `.env.testing`.
+
+La configuración de PHPUnit establece `baldor_test` como base de datos de pruebas. Además, `tests/TestCase.php` comprueba que las pruebas se ejecuten en el entorno `testing` y que el nombre de la base de datos termine en `_test`. Si estas condiciones no se cumplen, las pruebas se detienen por seguridad.
+
 Cubren:
 
 - Inicio de sesión (casos correctos e incorrectos).
@@ -208,11 +212,13 @@ Antes de ejecutar las migraciones, crea un usuario y una base de datos para Bald
 Puedes hacerlo desde `psql` o desde pgAdmin. En `psql`, conectado como administrador de PostgreSQL, ejecuta:
 
 ```sql
-CREATE USER baldor WITH PASSWORD 'TU_CONTRASEÑA_SEGURA';
+CREATE USER baldor WITH PASSWORD 'CONTRASEÑA';
+
 CREATE DATABASE baldor OWNER baldor;
+CREATE DATABASE baldor_test OWNER baldor;
 ```
 
-Sustituye `TU_CONTRASEÑA_SEGURA` por una contraseña propia. No utilices la contraseña del ejemplo.
+Sustituye `CONTRASEÑA` por una contraseña propia.
 
 ### Configurar la aplicación
 
@@ -236,7 +242,24 @@ DB_USERNAME=baldor
 DB_PASSWORD=TU_CONTRASEÑA
 ```
 
-Sustituye `TU_CONTRASEÑA` por la contraseña que estableciste al crear el usuario de PostgreSQL. No compartas ni subas el archivo `.env` al repositorio.
+Sustituye `TU_CONTRASEÑA` por la contraseña que estableciste al crear el usuario de PostgreSQL.
+
+### Configurar el entorno de pruebas
+
+Baldor utiliza una base de datos independiente para ejecutar las pruebas automatizadas. Esto evita que las pruebas modifiquen los datos de desarrollo.
+
+Crea un archivo llamado `.env.testing` en la raíz del proyecto, junto a `.env`, con la siguiente configuración:
+
+```ini
+APP_ENV=testing
+
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=baldor_test
+DB_USERNAME=baldor
+DB_PASSWORD=TU_CONTRASEÑA
+```
 
 Continúa con la instalación:
 
