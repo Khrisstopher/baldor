@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attempt;
 use App\Models\Exercise;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,14 +14,29 @@ use Inertia\Response;
 
 class ExerciseController extends Controller
 {
-    public function show(Topic $topic, Exercise $exercise): Response
+    public function show(Request $request, Topic $topic, Exercise $exercise): Response
     {
         abort_unless($exercise->topic_id === $topic->id, 404);
 
-        $nextExercise = $topic->exercises()
+        $userId = $request->user()->id;
+
+        $previousExerciseId = $topic->exercises()
+            ->where('position', '<', $exercise->position)
+            ->orderByDesc('position')
+            ->value('id');
+
+        $nextExerciseId = $topic->exercises()
             ->where('position', '>', $exercise->position)
             ->orderBy('position')
-            ->first();
+            ->value('id');
+
+        $exercise->loadExists([
+            'attempts as solved' => function (Builder $attempts) use ($userId) {
+                $attempts
+                    ->where('user_id', $userId)
+                    ->where('is_correct', true);
+            },
+        ]);
 
         return Inertia::render('exercises/show', [
             'topic' => [
@@ -32,15 +48,10 @@ class ExerciseController extends Controller
                 'position' => $exercise->position,
                 'statement' => $exercise->statement,
                 'options' => $exercise->options,
+                'solved' => (bool) $exercise->getAttribute('solved'),
             ],
-            'nextExercise' => $nextExercise
-                ? [
-                    'id' => $nextExercise->id,
-                    'position' => $nextExercise->position,
-                    'statement' => $nextExercise->statement,
-                    'options' => $nextExercise->options,
-                ]
-                : null,
+            'previousExercise' => $previousExerciseId,
+            'nextExercise' => $nextExerciseId,
         ]);
     }
 

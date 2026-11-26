@@ -15,15 +15,22 @@ type Exercise = {
     position: number;
     statement: string;
     options: string[];
+    solved: boolean;
 };
 
 type Props = {
     topic: Topic;
     exercise: Exercise;
+    previousExercise: Exercise | null;
     nextExercise: Exercise | null;
 };
 
-export default function Show({ topic, exercise, nextExercise }: Props) {
+export default function Show({
+    topic,
+    exercise,
+    previousExercise,
+    nextExercise,
+}: Props) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
     const [processing, setProcessing] = useState(false);
@@ -80,9 +87,17 @@ export default function Show({ topic, exercise, nextExercise }: Props) {
 
                     <h1 className="mt-4 text-2xl font-bold">{topic.title}</h1>
 
-                    <p className="mt-2 text-muted-foreground">
-                        {t('Exercise')} {exercise.position}
-                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-3">
+                        <p className="text-muted-foreground">
+                            {t('Exercise')} {exercise.position}
+                        </p>
+
+                        {exercise.solved && (
+                            <span className="inline-flex items-center rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+                                ✓ {t('Already solved')}
+                            </span>
+                        )}
+                    </div>
                 </section>
 
                 <section className="rounded-xl border border-border bg-card p-5 text-card-foreground">
@@ -144,8 +159,19 @@ export default function Show({ topic, exercise, nextExercise }: Props) {
                             );
                         })}
                     </div>
-
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        {previousExercise !== null && (
+                            <Link
+                                href={showExercise({
+                                    topic: topic.slug,
+                                    exercise: previousExercise,
+                                })}
+                                className="inline-flex justify-center rounded-lg border border-border px-5 py-3 text-center font-medium transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                            >
+                                ← {t('Previous exercise')}
+                            </Link>
+                        )}
+
                         <button
                             type="button"
                             onClick={checkAnswer}
@@ -163,17 +189,18 @@ export default function Show({ topic, exercise, nextExercise }: Props) {
                                   : t('Check Answer')}
                         </button>
 
-                        {result === 'correct' && nextExercise && (
-                            <Link
-                                href={showExercise({
-                                    topic: topic.slug,
-                                    exercise: nextExercise.id,
-                                })}
-                                className="inline-flex justify-center rounded-lg bg-cta px-5 py-3 text-center font-medium text-cta-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-cta focus-visible:outline-none"
-                            >
-                                {t('Next exercise')} →
-                            </Link>
-                        )}
+                        {(exercise.solved || result === 'correct') &&
+                            nextExercise !== null && (
+                                <Link
+                                    href={showExercise({
+                                        topic: topic.slug,
+                                        exercise: nextExercise,
+                                    })}
+                                    className="inline-flex justify-center rounded-lg bg-cta px-5 py-3 text-center font-medium text-cta-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-cta focus-visible:outline-none"
+                                >
+                                    {t('Next exercise')} →
+                                </Link>
+                            )}
                     </div>
                 </section>
             </div>
