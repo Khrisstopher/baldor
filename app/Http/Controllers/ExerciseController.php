@@ -30,6 +30,11 @@ class ExerciseController extends Controller
             ->orderBy('position')
             ->value('id');
 
+        $nextTopic = Topic::query()
+            ->where('position', '>', $topic->position)
+            ->orderBy('position')
+            ->first(['id', 'slug', 'title']);
+
         $exercise->loadExists([
             'attempts as solved' => function (Builder $attempts) use ($userId) {
                 $attempts
@@ -52,6 +57,12 @@ class ExerciseController extends Controller
             ],
             'previousExercise' => $previousExerciseId,
             'nextExercise' => $nextExerciseId,
+            'nextTopic' => $nextTopic
+                ? [
+                    'slug' => $nextTopic->slug,
+                    'title' => $nextTopic->title,
+                ]
+                : null,
         ]);
     }
 
