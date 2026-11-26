@@ -96,5 +96,8 @@
     "All completed": "Todo completado",
     "Congratulations!": "¡Felicidades!",
     "You have completed all the exercises. Excellent work!": "Has completado todos los ejercicios. ¡Excelente trabajo!",
-    "Back to dashboard": "Volver al panel principal"
+    "Back to dashboard": "Volver al panel principal",
+    "There was a problem with your answer. Please check it and try again.": "Hubo un problema con tu respuesta. Revísala e inténtalo nuevamente.",
+    "A server error occurred. Please try again later.": "Ocurrió un error en el servidor. Inténtalo nuevamente más tarde.",
+    "Connection error. Check your internet connection and try again.": "Error de conexión. Comprueba tu conexión a internet e inténtalo nuevamente."
 }

@@ -41,11 +41,14 @@ export default function Show({
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
     const [processing, setProcessing] = useState(false);
 
+    const [requestError, setRequestError] = useState<string | null>(null);
+
     function checkAnswer() {
         if (selectedOption === null || processing || result === 'correct')
             return;
 
         setProcessing(true);
+        setRequestError(null);
 
         router.post(
             store({
@@ -69,6 +72,26 @@ export default function Show({
                             : flash?.result === 'incorrect'
                               ? 'incorrect'
                               : null,
+                    );
+                },
+                onError: () => {
+                    setRequestError(
+                        t(
+                            'There was a problem with your answer. Please check it and try again.',
+                        ),
+                    );
+                },
+                onHttpException: () => {
+                    setRequestError(
+                        t('A server error occurred. Please try again later.'),
+                    );
+                    return false;
+                },
+                onNetworkError: () => {
+                    setRequestError(
+                        t(
+                            'Connection error. Check your internet connection and try again.',
+                        ),
                     );
                 },
                 onFinish: () => {
@@ -110,6 +133,15 @@ export default function Show({
                     <h2 className="text-lg font-semibold">
                         {exercise.statement}
                     </h2>
+
+                    {requestError && (
+                        <p
+                            role="alert"
+                            className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+                        >
+                            {requestError}
+                        </p>
+                    )}
 
                     <div className="mt-6 flex flex-col gap-3">
                         {exercise.options.map((option, index) => {
