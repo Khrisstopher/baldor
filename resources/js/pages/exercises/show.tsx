@@ -4,6 +4,7 @@ import { show as showTopic } from '@/routes/topics';
 import { store } from '@/routes/exercises/attempts';
 import { show as showExercise } from '@/routes/exercises';
 import { useState } from 'react';
+import { dashboard } from '@/routes';
 
 type Topic = {
     title: string;
@@ -193,7 +194,6 @@ export default function Show({
                                   ? t('Correct!')
                                   : t('Check Answer')}
                         </button>
-
                         {(exercise.solved || result === 'correct') &&
                             (nextExercise !== null ? (
                                 <Link
@@ -212,7 +212,14 @@ export default function Show({
                                 >
                                     {t('Next topic')} →
                                 </Link>
-                            ) : null)}
+                            ) : (
+                                <Link
+                                    href={dashboard()}
+                                    className="inline-flex justify-center rounded-lg bg-cta px-5 py-3 text-center font-medium text-cta-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-cta focus-visible:outline-none"
+                                >
+                                    {t('Back to dashboard')} →
+                                </Link>
+                            ))}
                     </div>
                 </section>
             </div>

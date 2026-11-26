@@ -10,6 +10,7 @@ type Props = {
     lastActivity: LastActivity;
     progress: Progress;
     topics: TopicSummary[];
+    allCompleted: boolean;
 };
 
 function topicStatus(done: number, total: number) {
@@ -31,7 +32,12 @@ function topicStatus(done: number, total: number) {
     };
 }
 
-export default function Dashboard({ lastActivity, progress, topics }: Props) {
+export default function Dashboard({
+    lastActivity,
+    progress,
+    topics,
+    allCompleted,
+}: Props) {
     const { auth } = usePage().props;
 
     const percent = progress.total
@@ -46,47 +52,68 @@ export default function Dashboard({ lastActivity, progress, topics }: Props) {
                     {t('Hello')}, {auth.user.name}
                 </h1>
 
-                {/* Bloque 1: continuar donde lo dejó */}
+                {/* Bloque 1: continuar o felicitar al usuario */}
                 <section className="rounded-xl border border-border bg-card p-6 text-card-foreground">
-                    <p className="text-sm font-semibold tracking-wide text-primary uppercase">
-                        {lastActivity
-                            ? t('Continue where you left off')
-                            : t('Start with the first topic')}
-                    </p>
-
-                    {lastActivity ? (
+                    {allCompleted ? (
                         <>
+                            <p className="text-sm font-semibold tracking-wide text-success uppercase">
+                                {t('All completed')}
+                            </p>
+
                             <h2 className="mt-2 text-xl font-bold">
-                                {lastActivity.topic}
+                                {t('Congratulations!')}
                             </h2>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                                {t('Exercise')} {lastActivity.exercise}{' '}
-                                {t('of')} {lastActivity.total}
+
+                            <p className="mt-2 text-muted-foreground">
+                                {t(
+                                    'You have completed all the exercises. Excellent work!',
+                                )}
                             </p>
                         </>
                     ) : (
-                        <p className="mt-2 text-muted-foreground">
-                            {t(
-                                'Practice step by step with the book exercises, organized by topic and in order of difficulty.',
-                            )}
-                        </p>
-                    )}
+                        <>
+                            <p className="text-sm font-semibold tracking-wide text-primary uppercase">
+                                {lastActivity
+                                    ? t('Continue where you left off')
+                                    : t('Start with the first topic')}
+                            </p>
 
-                    {lastActivity || topics.length > 0 ? (
-                        <Link
-                            href={
-                                lastActivity
-                                    ? showExercise({
-                                          topic: lastActivity.slug,
-                                          exercise: lastActivity.exerciseId,
-                                      })
-                                    : show({ topic: topics[0].slug })
-                            }
-                            className="mt-5 inline-block rounded-md bg-cta px-6 py-2.5 text-sm font-semibold text-cta-foreground hover:bg-cta/90"
-                        >
-                            {lastActivity ? t('Continue') : t('Start')}
-                        </Link>
-                    ) : null}
+                            {lastActivity ? (
+                                <>
+                                    <h2 className="mt-2 text-xl font-bold">
+                                        {lastActivity.topic}
+                                    </h2>
+                                    <p className="mt-1 text-sm text-muted-foreground">
+                                        {t('Exercise')} {lastActivity.exercise}{' '}
+                                        {t('of')} {lastActivity.total}
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="mt-2 text-muted-foreground">
+                                    {t(
+                                        'Practice step by step with the book exercises, organized by topic and in order of difficulty.',
+                                    )}
+                                </p>
+                            )}
+
+                            {lastActivity || topics.length > 0 ? (
+                                <Link
+                                    href={
+                                        lastActivity
+                                            ? showExercise({
+                                                  topic: lastActivity.slug,
+                                                  exercise:
+                                                      lastActivity.exerciseId,
+                                              })
+                                            : show({ topic: topics[0].slug })
+                                    }
+                                    className="mt-5 inline-block rounded-md bg-cta px-6 py-2.5 text-sm font-semibold text-cta-foreground hover:bg-cta/90"
+                                >
+                                    {lastActivity ? t('Continue') : t('Start')}
+                                </Link>
+                            ) : null}
+                        </>
+                    )}
                 </section>
 
                 {/* Bloque 2: progreso general */}
