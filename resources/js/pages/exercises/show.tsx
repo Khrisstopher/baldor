@@ -21,8 +21,12 @@ type Exercise = {
 type Props = {
     topic: Topic;
     exercise: Exercise;
-    previousExercise: Exercise | null;
-    nextExercise: Exercise | null;
+    previousExercise: number | null;
+    nextExercise: number | null;
+    nextTopic: {
+        slug: string;
+        title: string;
+    } | null;
 };
 
 export default function Show({
@@ -30,6 +34,7 @@ export default function Show({
     exercise,
     previousExercise,
     nextExercise,
+    nextTopic,
 }: Props) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
@@ -190,7 +195,7 @@ export default function Show({
                         </button>
 
                         {(exercise.solved || result === 'correct') &&
-                            nextExercise !== null && (
+                            (nextExercise !== null ? (
                                 <Link
                                     href={showExercise({
                                         topic: topic.slug,
@@ -200,7 +205,14 @@ export default function Show({
                                 >
                                     {t('Next exercise')} →
                                 </Link>
-                            )}
+                            ) : nextTopic !== null ? (
+                                <Link
+                                    href={showTopic({ topic: nextTopic.slug })}
+                                    className="inline-flex justify-center rounded-lg bg-cta px-5 py-3 text-center font-medium text-cta-foreground transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-cta focus-visible:outline-none"
+                                >
+                                    {t('Next topic')} →
+                                </Link>
+                            ) : null)}
                     </div>
                 </section>
             </div>
