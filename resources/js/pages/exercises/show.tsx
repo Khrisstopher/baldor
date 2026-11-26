@@ -25,7 +25,12 @@ type Props = {
     nextExercise: Exercise | null;
 };
 
-export default function Show({ topic, exercise, previousExercise, nextExercise }: Props) {
+export default function Show({
+    topic,
+    exercise,
+    previousExercise,
+    nextExercise,
+}: Props) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
     const [processing, setProcessing] = useState(false);
@@ -180,8 +185,8 @@ export default function Show({ topic, exercise, previousExercise, nextExercise }
                             {processing
                                 ? t('Checking...')
                                 : result === 'correct'
-                                ? t('Correct!')
-                                : t('Check Answer')}
+                                  ? t('Correct!')
+                                  : t('Check Answer')}
                         </button>
 
                         {(exercise.solved || result === 'correct') &&

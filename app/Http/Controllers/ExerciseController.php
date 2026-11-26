@@ -5,17 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Attempt;
 use App\Models\Exercise;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class ExerciseController extends Controller
 {
-
     public function show(Request $request, Topic $topic, Exercise $exercise): Response
     {
         abort_unless($exercise->topic_id === $topic->id, 404);
