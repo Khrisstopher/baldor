@@ -162,10 +162,7 @@ test('an exercise receives the next exercise in inertia props', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('exercises/show')
-            ->where('nextExercise.id', $nextExercise->id)
-            ->where('nextExercise.position', 2)
-            ->where('nextExercise.statement', $nextExercise->statement)
-            ->where('nextExercise.options', $nextExercise->options)
+            ->where('nextExercise', $nextExercise->id)
         );
 });
 
@@ -219,8 +216,7 @@ test('the next exercise is determined by position and not by id', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('exercises/show')
-            ->where('nextExercise.id', $exerciseAtPosition30->id)
-            ->where('nextExercise.position', 30)
+            ->where('nextExercise', $exerciseAtPosition30->id)
         );
 });
 
@@ -246,5 +242,173 @@ test('an exercise from another topic is never returned as next exercise', functi
         ->assertInertia(fn (Assert $page) => $page
             ->component('exercises/show')
             ->where('nextExercise', null)
+        );
+});
+
+test('an exercise receives the previous exercise id in inertia props', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $previousExercise = Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    $currentExercise = Exercise::factory()->for($topic)->create([
+        'position' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $currentExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('previousExercise', $previousExercise->id)
+        );
+});
+
+test('the first exercise receives null as previous exercise', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $firstExercise = Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    Exercise::factory()->for($topic)->create([
+        'position' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $firstExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('previousExercise', null)
+        );
+});
+
+test('the previous exercise is determined by position and not by id', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $exerciseAtPosition15 = Exercise::factory()->for($topic)->create([
+        'position' => 15,
+    ]);
+
+    Exercise::factory()->for($topic)->create([
+        'position' => 10,
+    ]);
+
+    $currentExercise = Exercise::factory()->for($topic)->create([
+        'position' => 20,
+    ]);
+
+    expect($exerciseAtPosition15->id)->toBeLessThan(
+        $currentExercise->id
+    );
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $currentExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('previousExercise', $exerciseAtPosition15->id)
+        );
+});
+
+test('an exercise from another topic is never returned as previous exercise', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+    $anotherTopic = Topic::factory()->create();
+
+    $currentExercise = Exercise::factory()->for($topic)->create([
+        'position' => 2,
+    ]);
+
+    Exercise::factory()->for($anotherTopic)->create([
+        'position' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $currentExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('previousExercise', null)
+        );
+});
+
+test('an exercise is solved only when the current user has a correct attempt', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $anotherUser = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $exercise = Exercise::factory()->for($topic)->create();
+
+    $wrongAnswer = collect($exercise->options)
+        ->first(fn ($option) => $option !== $exercise->answer);
+
+    // El usuario actual tiene un intento incorrecto.
+    $exercise->attempts()->create([
+        'user_id' => $user->id,
+        'given_answer' => $wrongAnswer,
+        'is_correct' => false,
+    ]);
+
+    // Otro usuario sí resolvió correctamente el ejercicio.
+    $exercise->attempts()->create([
+        'user_id' => $anotherUser->id,
+        'given_answer' => $exercise->answer,
+        'is_correct' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $exercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('exercise.solved', false)
+        );
+});
+
+test('an exercise is solved when the current user has a correct attempt', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create();
+
+    $exercise = Exercise::factory()->for($topic)->create();
+
+    $exercise->attempts()->create([
+        'user_id' => $user->id,
+        'given_answer' => $exercise->answer,
+        'is_correct' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $exercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('exercise.solved', true)
         );
 });
