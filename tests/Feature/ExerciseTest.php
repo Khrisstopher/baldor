@@ -142,6 +142,7 @@ test('an incorrect answer saves an attempt as incorrect', function () {
     ]);
 });
 
+// Un ejercicio recibe el siguiente ejercicio.
 test('an exercise receives the next exercise in inertia props', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -166,6 +167,7 @@ test('an exercise receives the next exercise in inertia props', function () {
         );
 });
 
+// El último ejercicio recibe null como siguiente ejercicio-
 test('the last exercise receives null as next exercise', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -190,6 +192,7 @@ test('the last exercise receives null as next exercise', function () {
         );
 });
 
+// Comprueba que el siguiente ejercicio se determina por posición y no por id.
 test('the next exercise is determined by position and not by id', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -220,6 +223,7 @@ test('the next exercise is determined by position and not by id', function () {
         );
 });
 
+// Comprueba que un ejercicio perteneciente a otro tema nunca se devuelve como ejercicio anterior.
 test('an exercise from another topic is never returned as next exercise', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -245,6 +249,7 @@ test('an exercise from another topic is never returned as next exercise', functi
         );
 });
 
+// Comprueba que un ejercicio recibe el id del ejercicio anterior en las props de Inertia.
 test('an exercise receives the previous exercise id in inertia props', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -269,6 +274,7 @@ test('an exercise receives the previous exercise id in inertia props', function 
         );
 });
 
+// Comprueba que el primer ejercicio recibe null como ejercicio anterior.
 test('the first exercise receives null as previous exercise', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -293,6 +299,7 @@ test('the first exercise receives null as previous exercise', function () {
         );
 });
 
+// Comprueba que el ejercicio anterior se determina por posición y no por id.
 test('the previous exercise is determined by position and not by id', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -325,6 +332,7 @@ test('the previous exercise is determined by position and not by id', function (
         );
 });
 
+// Comprueba que un ejercicio perteneciente a otro tema nunca se devuelve como ejercicio anterior.
 test('an exercise from another topic is never returned as previous exercise', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -350,6 +358,7 @@ test('an exercise from another topic is never returned as previous exercise', fu
         );
 });
 
+// Comprueba que un ejercicio se marca como resuelto solo cuando el usuario actual tiene un intento correcto.
 test('an exercise is solved only when the current user has a correct attempt', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -389,6 +398,7 @@ test('an exercise is solved only when the current user has a correct attempt', f
         );
 });
 
+// Comprueba que un ejercicio se marca como resuelto cuando el usuario actual tiene un intento correcto.
 test('an exercise is solved when the current user has a correct attempt', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
@@ -410,5 +420,96 @@ test('an exercise is solved when the current user has a correct attempt', functi
         ->assertInertia(fn (Assert $page) => $page
             ->component('exercises/show')
             ->where('exercise.solved', true)
+        );
+});
+
+// Un ejercicio recibe el siguiente tema en las props de Inertia si es el último ejercicio del tema actual y hay un siguiente tema disponible.
+test('an exercise receives the next topic in inertia props', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $topic = Topic::factory()->create([
+        'position' => 1,
+    ]);
+
+    $nextTopic = Topic::factory()->create([
+        'position' => 2,
+    ]);
+
+    $lastExercise = Exercise::factory()->for($topic)->create([
+        'position' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$topic, $lastExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise', null)
+            ->where('nextTopic.slug', $nextTopic->slug)
+            ->where('nextTopic.title', $nextTopic->title)
+        );
+});
+
+// Comprueba que el último tema recibe null como siguiente tema.
+test('the last topic receives null as next topic', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    Topic::factory()->create([
+        'position' => 1,
+    ]);
+
+    $lastTopic = Topic::factory()->create([
+        'position' => 2,
+    ]);
+
+    $lastExercise = Exercise::factory()->for($lastTopic)->create([
+        'position' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$lastTopic, $lastExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextExercise', null)
+            ->where('nextTopic', null)
+        );
+});
+
+// Comprueba que el siguiente tema se determina por posición y no por id.
+test('the next topic is determined by position and not by id', function () {
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $currentTopic = Topic::factory()->create([
+        'position' => 20,
+    ]);
+
+    $topicAtPosition40 = Topic::factory()->create([
+        'position' => 40,
+    ]);
+
+    $topicAtPosition30 = Topic::factory()->create([
+        'position' => 30,
+    ]);
+
+    $lastExercise = Exercise::factory()->for($currentTopic)->create([
+        'position' => 1,
+    ]);
+
+    expect($topicAtPosition40->id)->toBeLessThan($topicAtPosition30->id);
+
+    $this->actingAs($user)
+        ->get(route('exercises.show', [$currentTopic, $lastExercise]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('exercises/show')
+            ->where('nextTopic.slug', $topicAtPosition30->slug)
+            ->where('nextTopic.title', $topicAtPosition30->title)
         );
 });

@@ -39,6 +39,12 @@ class DashboardController extends Controller
             ->latest('id')
             ->first();
 
+        $totalExercises = (int) $topics->sum('total');
+        $solvedExercises = (int) $topics->sum('done');
+
+        $allCompleted = $totalExercises > 0
+            && $solvedExercises === $totalExercises;
+
         return Inertia::render('dashboard', [
             'lastActivity' => $last ? [
                 'topic' => $last->exercise->topic->title,
@@ -48,12 +54,13 @@ class DashboardController extends Controller
                 'total' => $topics->firstWhere('id', $last->exercise->topic_id)['total'] ?? 0,
             ] : null,
             'progress' => [
-                'solved' => $topics->sum('done'),
-                'total' => $topics->sum('total'),
+                'solved' => $solvedExercises,
+                'total' => $totalExercises,
                 'topicsDone' => $topics->filter(fn ($t) => $t['total'] > 0 && $t['done'] >= $t['total'])->count(),
                 'topicsTotal' => $topics->count(),
             ],
             'topics' => $topics,
+            'allCompleted' => $allCompleted,
         ]);
     }
 }

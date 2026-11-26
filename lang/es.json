@@ -92,5 +92,9 @@
     "Next exercise": "Siguiente ejercicio",
     "Already solved": "Ya resuelto",
     "Previous exercise": "Ejercicio anterior",
-    "Next topic": "Siguiente tema"
+    "Next topic": "Siguiente tema",
+    "All completed": "Todo completado",
+    "Congratulations!": "¡Felicidades!",
+    "You have completed all the exercises. Excellent work!": "Has completado todos los ejercicios. ¡Excelente trabajo!",
+    "Back to dashboard": "Volver al panel principal"
 }

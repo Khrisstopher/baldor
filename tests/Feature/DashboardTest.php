@@ -103,3 +103,62 @@ test('a topic with all exercises solved counts as completed', function () {
             ->where('progress.topicsDone', 1)
             ->where('progress.solved', 2));
 });
+
+// Todos los ejercicios están terminados correctamente.
+test('dashboard reports all completed when every exercise is solved', function () {
+    $user = User::factory()->create();
+
+    $topic = Topic::factory()->has(
+        Exercise::factory()->count(3)->sequence(
+            fn ($s) => ['position' => $s->index + 1]
+        )
+    )->create();
+
+    $topic->exercises->each(
+        fn ($exercise) => Attempt::factory()
+            ->correct()
+            ->for($user)
+            ->for($exercise)
+            ->create()
+    );
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('allCompleted', true)
+            ->where('progress.solved', 3)
+            ->where('progress.total', 3));
+});
+
+// Todavía quedan ejercicios por resolver
+test('dashboard reports not completed when exercises remain unsolved', function () {
+    $user = User::factory()->create();
+
+    $topic = Topic::factory()->has(
+        Exercise::factory()->count(3)->sequence(
+            fn ($s) => ['position' => $s->index + 1]
+        )
+    )->create();
+
+    Attempt::factory()
+        ->correct()
+        ->for($user)
+        ->for($topic->exercises->first())
+        ->create();
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('allCompleted', false)
+            ->where('progress.solved', 1)
+            ->where('progress.total', 3));
+});
+
+// No hay ningún ejercicio registrado en base de datos
+test('dashboard reports not completed when there are no exercises', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('allCompleted', false)
+            ->where('progress.solved', 0)
+            ->where('progress.total', 0));
+});
